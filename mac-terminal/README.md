@@ -3,9 +3,8 @@
 The end result of this, should be something like this:
 ![Terminal setup example](https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/mac-terminal/example.png)
 
-As always this assumes your running on an effectively blank slate. Furthermore you should have `brew` installed, be sure to run `brew doctor` first.
+As always this assumes your running on an effectively blank slate. Furthermore you should have `brew` installed, be sure to run `brew doctor` first. The guide is in 3 parts:
 
-The guide is in 3 parts:
 1. [iTerm](#iTerm)
 2. [vim](#vim)
 3. [zsh](#zsh)
