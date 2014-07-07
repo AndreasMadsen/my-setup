@@ -1,7 +1,7 @@
 #Terminal Setup
 
 The end result of this, should be something like this:
-[[!picture]]
+![Terminal setup example][example]
 
 As always this assumes your running on an effectively blank slate.
 
