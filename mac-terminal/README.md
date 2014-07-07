@@ -66,6 +66,6 @@ git config --global core.editor /usr/bin/vim
 
 ## zsh
 
-Install oh-my-zsh using `curl -L http://install.ohmyz.sh | sh`
-Edit `~/.zshrc` and set `ZSH_THEME="Agnoster”`
-Edit `~/.oh-my-zsh/themes/agnoster.zsh-theme` and uncomment with `#` the `prompt_context` line in the `build_prompt` function.
+1. Install oh-my-zsh using `curl -L http://install.ohmyz.sh | sh`
+2. Edit `~/.zshrc` and set `ZSH_THEME="Agnoster”`
+3. Edit `~/.oh-my-zsh/themes/agnoster.zsh-theme` and uncomment with `#` the `prompt_context` line in the `build_prompt` function.
