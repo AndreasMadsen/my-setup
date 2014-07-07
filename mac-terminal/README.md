@@ -1,6 +1,6 @@
-#Terminal Setup
+#Mac Terminal Setup
 
-The end result of this, should be something like this:
+This is a guide for how to set up your terminal so it looks exactly like mine. The end result should be this:
 ![Terminal setup example](https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/mac-terminal/example.png)
 
 As always this assumes your running on an effectively blank slate. Furthermore you should have `brew` installed, be sure to run `brew doctor` first. The guide is in 3 parts:
