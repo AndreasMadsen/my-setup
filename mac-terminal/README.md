@@ -1,7 +1,7 @@
 #Terminal Setup
 
 The end result of this, should be something like this:
-![Terminal setup example][example]
+![Terminal setup example](https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/mac-terminal/example.png)
 
 As always this assumes your running on an effectively blank slate.
 
