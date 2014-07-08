@@ -64,6 +64,8 @@ curl http://j.mp/spf13-vim3 -L -o - | sh
 git config --global core.editor /usr/bin/vim
 ```
 
+At last edit `~/.vimrc.before` and enable `g:airline_powerline_fonts = 1` by uncommenting that line (remove `"`)
+
 ## zsh
 
 1. Install oh-my-zsh using `curl -L http://install.ohmyz.sh | sh`
