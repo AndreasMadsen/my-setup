@@ -1,4 +1,4 @@
-## [DTU HPC – Python 2.7](dtu-hpc-python2)
+# DTU HPC – Python 2.7
 
 Install python and friends on DTUs shared user system. In particually with OpenCL and CUDA support.
 
