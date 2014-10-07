@@ -1,0 +1,156 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}	% Flere sprog tegnsæt (fx æøå)
+\usepackage[danish]{babel}	% Dansk orddeling (kan ændres til english)
+\usepackage[T1]{fontenc}		% Brug 8-bit front
+\usepackage{lmodern}		% Vektor front
+
+\usepackage[svgnames]{xcolor} % Udvider \color med "SVG color names"
+\usepackage{graphicx}	% Kompatibilitet til visning af pixel billeder (.png, .jpg, .gif)
+\usepackage{epstopdf}	% Kompatibilitet til visning af vector billeder (.eps)
+\usepackage{parskip}	% Tilføjer vertikal margin til hver paragraph
+\usepackage{float}		% TIllader H som positions parameter
+\usepackage{subcaption}	% Tillader subfigure, subtable samt \captions
+\usepackage{amssymb}	% Flere matematiske symboler
+\usepackage{amsthm}      % Endnu flere matematiske symboler
+\usepackage{mathtools}	% Det meste matematik (indeholder ams­math og rettelser)
+\usepackage{xfrac}		% Flere fracs (\sfrac{}{})
+\usepackage{listings}	% Indsæt code
+\usepackage{fancyhdr}	% Side hoved og sidefod
+\usepackage{todonotes}	% Cool todo notes, [disable] skjuler todos
+\usepackage[bookmarks,bookmarksnumbered,hidelinks]{hyperref} % clickable pdf (til sidst)
+
+%listing settings, æøå support, font config, line number, left lines
+\lstset{
+    breakatwhitespace=false, breaklines=true,
+    inputencoding=utf8, extendedchars=true,
+    literate={å}{{\aa}}1 {æ}{{\ae}}1 {ø}{{\o}}1 {Å}{{\AA}}1 {Æ}{{\AE}}1 {Ø}{{\O}}1,
+    keepspaces=true, showstringspaces=false, basicstyle=\small\ttfamily,
+    frame=L, numbers=left, numberstyle=\scriptsize\color{gray},
+    keywordstyle=\color{SteelBlue}\ttfamily,
+    stringstyle=\color{IndianRed}\ttfamily,
+    commentstyle=\color{Teal}\ttfamily,
+}
+
+\setlength{\marginparwidth}{80pt} 				% Mere brede på margin notes og todos
+\setlength{\parindent}{0cm}   					% Deaktiver afsnit indrykning
+\DeclareGraphicsExtensions{.pdf,.eps,.png,.jpg,.gif}	% ændre til .png, .jpg for hurtig visning
+\pagestyle{fancy}
+\fancyhead[L]{Andreas Madsen – s123598}
+
+\begin{document}
+
+\title{\LaTeX\ dokument}
+\author{Andreas Madsen – s123598}
+\date{I DAG}
+\maketitle
+
+\section{Overskrift}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mattis pharetra porta. Nulla lobortis augue quis neque ultricies mollis.
+
+\begin{equation}
+  \mathbb{N}, \mathbb{I}, \mathbb{Q}, \mathbb{R}, \mathbb{C}
+\end{equation}
+
+\subsection{Normale ligninger}
+
+Integer aliquet accumsan ante sed consequat. Proin enim lorem, lacinia in varius non, fermentum id tellus. Nam lobortis magna non dui varius rutrum aliquam enim tincidunt. Aliquam erat felis, scelerisque eu commodo aliquet, egestas vitae lacus.
+
+\begin{equation}
+	f(x) = 3x + 7 \wedge g(x) = x + 4
+\end{equation}
+
+\subsection{Matricer}
+
+Sed consequat luctus imperdiet. Praesent at ligula arcu. Sed sodales augue ac massa ultricies mattis. Pellentesque ut sodales leo. Duis eleifend, risus eget scelerisque condimentum, eros ipsum aliquet ipsum, at placerat mi orci ac lectus.
+
+\begin{equation}
+  T =
+  \begin{bmatrix}
+    1 & 2 & 3 & 4  \\
+    5 & 6 & 7 & 8  \\
+    9 & 10& 11& 12 \\
+    13& 14& 15& 16
+  \end{bmatrix}
+\end{equation}
+
+
+\section{Figur}
+
+Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam in nibh magna. Nulla iaculis lorem non ante commodo sagittis a non enim.
+\begin{figure}[H]
+	\centering
+	%\includegraphics[height=3cm]{none}
+	\caption{Rin Figur indsæt bare et filnavn på ``no'', EPS er bedst}
+\end{figure}
+
+\section {Accents}
+
+Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam in nibh magna.
+
+\begin{equation}
+\hat{a}, \check{a}, \breve{a}, \acute{a}, \grave{a}, \tilde{a}, \bar{a}, \vec{a}, \dot{a}, \ddot{a}
+\end{equation}
+
+\section {Kode}
+
+Ed consequat luctus imperdiet. Praesent at ligula arcu. Sed sodales augue ac massa ultricies mattis. Pellentesque ut sodales leo. Duis eleifend, risus eget scelerisque condimentum.
+
+\begin{lstlisting}[language=MatLab]
+for i = 1:3
+  if i >= 5 % literate programming replacement
+     disp('cool');
+  end
+  [~,ind] = max(vec);
+  x_last = x(1,end);
+  v(end);
+  really really long really really long really really long really really long really really long line % blaaaaaaaa
+end
+\end{lstlisting}
+
+\section {Tabel}
+
+Ed consequat luctus imperdiet. Praesent at ligula arcu. Sed sodales augue ac massa ultricies mattis. Pellentesque ut sodales leo. Duis eleifend, risus eget scelerisque condimentum.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{r|c c c}
+	i  & A   & B    & C\\ \hline
+	1  & 13  & 52.3 & 0.0082 \\
+	2  & 10  & 24.5 & 0.0089 \\
+	3  & 12  & 5.10 & 0.0084 \\
+	4  & 11  & 0.20 & 0.0083 \\
+	5  & 18  & 0.01 & 0.0083 \\
+	6  & 16  & 0.00 & 0.0082
+\end{tabular}
+\caption{Mange tal}
+\end{table}
+
+\section{Mathematical fields}
+
+\subsection{Logic}
+
+\begin{equation}
+A \vee B \wedge C
+\end{equation}
+
+\subsection{Properbility}
+
+\begin{equation}
+P(A \cup B \cap C)
+\end{equation}
+
+\section{install unofficial package}
+
+\begin{lstlisting}
+run `tlmgr conf`
+find TEXMFHOME and open/create path
+open/create subfolder (see table)
+insert files
+rebuild index with `texhash`
+\end{lstlisting}
+
+Link to step by step guide: \\ \url{http://en.wikibooks.org/wiki/LaTeX/Installing\_Extra\_Packages\#Installing\_a\_package}
+
+\end{document}
