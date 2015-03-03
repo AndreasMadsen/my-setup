@@ -1,9 +1,15 @@
-# DTU HPC – Python 2.7
+# DTU HPC – Python 3.4
 
-Install python and friends on DTUs shared user system. In particually with OpenCL and CUDA support.
+Install python and friends on DTUs shared user system. Included is:
 
-**I no longer maintain this for python 2.7 and suggest you use [python 3.4](dtu-hpc-python3) script
-instead of possible.**
+* numpy
+* scipy
+* matplotlib (with Qt4 and basemap)
+* scikit-learn
+* pandas
+* PyOpenCL (with mako)
+* Theano (with pydot, clBLAS, libgpuarray)
+* netCDF4
 
 ### Note on login
 
@@ -11,13 +17,13 @@ instead of possible.**
 
 ### Run setup script
 
-Type or copy this after connecting with SSH, using `time` this have been measured to take 37 minutes:
+Type or copy this after connecting with SSH:
 
 ```shell
 k40sh
-wget https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python2/setup-python2.sh
-sh setup_python2.sh
-rm -f setup_python2.sh
+wget https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/setup-python3.sh
+sh setup_python3.sh
+rm -f setup_python3.sh
 exit
 ```
 
@@ -25,23 +31,27 @@ exit
 
 For any future login and after the installation run one of these:
 
-If you need OpenCL or CUDA run:
+**If you need OpenCL or CUDA run:**
 
 ```shell
 k40sh
 module load python
 module load gcc
-module load cuda/6.0
+module load qt
+module load cuda
+export PYTHONPATH=
 source ~/stdpy/bin/activate
 ```
 
-Otherwise use:
+**Otherwise use:**
 
 ```shell
 qrsh
 module load python
 module load gcc
+module load qt
+export PYTHONPATH=
 source ~/stdpy/bin/activate
 ```
 
-Personally I have all the `module` and `source` stuff in my `.profile.sh` file.
+Personally I have all the `module`, `export` and `source` stuff in my `.profile.sh` file.
