@@ -54,4 +54,20 @@ export PYTHONPATH=
 source ~/stdpy3/bin/activate
 ```
 
-Personally I have all the `module`, `export` and `source` stuff in my `.profile.sh` file.
+You can make this happen automatically for all shell-login, just run:
+
+```shell
+cat >> .gbarrc <<EOF
+MODULES=python3,gcc,qt,cuda
+EOF
+cat >> .profile <<EOF
+# Setup local python3
+if tty -s ; then
+export PYTHONPATH=
+source ~/stdpy3/bin/activate
+fi
+
+EOF
+```
+
+However you should still do the `module`, `export` and `source` dance when makeing a script for `qsub`.
