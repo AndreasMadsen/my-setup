@@ -15,9 +15,9 @@ export CXX='g++ -w'
 export CUDA_PATH=/opt/cuda/6.5
 
 # Setup virtual env
+export PYTHONPATH=
 pyvenv ~/stdpy3 --copies
 source ~/stdpy3/bin/activate
-export PYTHONPATH=
 
 #
 # Install basic python math
@@ -96,6 +96,21 @@ rm -rf pyopencl-2015.1*
 
 # Instal pydot (optional theano dependencies)
 pip3 install https://bitbucket.org/prologic/pydot/get/ac76697320d6.zip
+patch -f stdpy3/lib/python3.4/site-packages/dot_parser.py \
+<<EOF
+--- a/stdpy3/lib/python3.4/site-packages/dot_parser.py
++++ b/stdpy3/lib/python3.4/site-packages/dot_parser.py
+@@ -25,8 +25,9 @@
+ from pyparsing import ( nestedExpr, Literal, CaselessLiteral, Word, Upcase, OneOrMore, ZeroOrMore,
+     Forward, NotAny, delimitedList, oneOf, Group, Optional, Combine, alphas, nums,
+     restOfLine, cStyleComment, nums, alphanums, printables, empty, quotedString,
+-    ParseException, ParseResults, CharsNotIn, _noncomma, dblQuotedString, QuotedString, ParserElement )
++    ParseException, ParseResults, CharsNotIn, dblQuotedString, QuotedString, ParserElement )
+
++_noncomma = "".join([c for c in printables if c != ","])
+
+ class P_AttrList:
+EOF
 
 # Install clBLAS (dependency for libgpuarray)
 git clone https://github.com/clMathLibraries/clBLAS.git
