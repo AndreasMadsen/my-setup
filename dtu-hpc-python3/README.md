@@ -35,7 +35,7 @@ For any future login and after the installation run one of these:
 
 ```shell
 k40sh
-module load python
+module load python3
 module load gcc
 module load qt
 module load cuda
@@ -47,7 +47,7 @@ source ~/stdpy/bin/activate
 
 ```shell
 qrsh
-module load python
+module load python3
 module load gcc
 module load qt
 export PYTHONPATH=
