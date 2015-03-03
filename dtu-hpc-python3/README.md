@@ -40,7 +40,7 @@ module load gcc
 module load qt
 module load cuda
 export PYTHONPATH=
-source ~/stdpy/bin/activate
+source ~/stdpy3/bin/activate
 ```
 
 **Otherwise use:**
@@ -51,7 +51,7 @@ module load python3
 module load gcc
 module load qt
 export PYTHONPATH=
-source ~/stdpy/bin/activate
+source ~/stdpy3/bin/activate
 ```
 
 Personally I have all the `module`, `export` and `source` stuff in my `.profile.sh` file.
