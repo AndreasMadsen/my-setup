@@ -389,36 +389,3 @@ cd netCDF4-1.1.5
 python setup.py install
 cd ..
 rm -rf netCDF4-1.1.5*
-
-
-#
-# Install netCDF4-python
-#
-
-# Install HDF5 (netCDF4 dependency)
-wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar
-tar -xf hdf5-1.8.14.tar
-cd hdf5-1.8.14
-./configure --prefix=$HOME --enable-shared --enable-hl
-make
-make install
-cd ..
-rm -rf hdf5-1.8.14*
-
-# Install netCDF4 (netCDF4-python dependency)
-wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.tar.gz
-tar -xzf netcdf-4.3.3.tar.gz
-cd netcdf-4.3.3
-./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=$HOME
-make
-make install
-cd ..
-rm -rf netcdf-4.3.3*
-
-# Install netCDF4-python
-wget https://pypi.python.org/packages/source/n/netCDF4/netCDF4-1.1.5.tar.gz
-tar -xzf netCDF4-1.1.5.tar.gz
-cd netCDF4-1.1.5
-python setup.py install
-cd ..
-rm -rf netCDF4-1.1.5*
