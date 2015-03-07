@@ -1,13 +1,16 @@
 #!/bin/sh
 
-# k40sh
-# wget file.sh
-# sh file.sh
-# rm -f file.sh
-# exit
+#PBS -N setup-python3
+#PBS -l walltime=01:30:00
+#PBS -l nodes=1:ppn=1:gpus=1
 
 # Stop on error
 set -e
+
+# Set $HOME if running as a qsub script
+if [ -z "$PBS_O_WORKDIR" ]; then
+    export HOME=$PBS_O_WORKDIR
+fi
 
 # Retry wget errors (20 times) (e.q. 504)
 # sourceforge in particular is not very stable
@@ -28,7 +31,7 @@ export CC='gcc -w'
 export CXX='g++ -w'
 
 # Setup cuda path for clBLAS
-export CUDA_PATH=/opt/cuda/6.5
+export CUDA_PATH=/opt/cuda/current
 
 # Use HOME directory as base
 cd $HOME
@@ -102,8 +105,8 @@ wgetretry https://pypi.python.org/packages/source/p/pyopencl/pyopencl-2015.1.tar
 tar -xf pyopencl-2015.1.tar.gz
 cd pyopencl-2015.1
 python3 configure.py \
-    --cl-inc-dir=/opt/cuda/6.5/include \
-    --cl-lib-dir=/opt/cuda/6.5/lib \
+    --cl-inc-dir=$CUDA_PATH/include \
+    --cl-lib-dir=$CUDA_PATH/lib \
     --cl-libname=OpenCL
 make install
 cd $HOME
@@ -194,7 +197,7 @@ device = gpu
 floatX = float32
 
 [cuda]
-root = /opt/cuda/6.5
+root = /opt/cuda/current
 
 [nvcc]
 flags = -arch=sm_30
