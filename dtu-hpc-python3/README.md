@@ -20,11 +20,11 @@ Install python and friends on DTUs shared user system. Included is:
 Type or copy this after connecting with SSH:
 
 ```shell
-k40sh
 wget https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/setup-python3.sh
-sh setup_python3.sh
-rm -f setup_python3.sh
-exit
+qsub setup-python3.sh
+while [ ! -f "setup-python3.log" ]; do sleep 1; done
+less +F -r setup-python3.log
+rm -f setup-python3.*
 ```
 
 ### After install and future login
