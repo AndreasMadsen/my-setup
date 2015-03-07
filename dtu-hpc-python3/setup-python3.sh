@@ -6,6 +6,9 @@
 # rm -f file.sh
 # exit
 
+# Stop on error
+set -e
+
 # Load already installed software
 module load python3
 module load gcc
@@ -25,6 +28,9 @@ export PYTHONPATH=
 pyvenv ~/stdpy3 --copies
 source ~/stdpy3/bin/activate
 
+# Use HOME directory as base
+cd $HOME
+
 #
 # Install basic python math
 #
@@ -42,7 +48,7 @@ cd sip-4.16.6
 python3 configure.py
 make
 make install
-cd ..
+cd $HOME
 rm -rf sip-4.16.6*
 
 # Install PyQt4 (optional backend for matplotlib)
@@ -52,7 +58,7 @@ cd PyQt-x11-gpl-4.11.3
 python3 configure.py --confirm-license
 make -j4
 make install
-cd ..
+cd $HOME
 rm -rf PyQt-x11-gpl-4.11.3*
 
 # Install matplotlib
@@ -68,7 +74,7 @@ make
 make install
 cd ..
 python setup.py install
-cd ..
+cd $HOME
 rm -rf basemap-1.0.7*
 
 #
@@ -93,7 +99,7 @@ python3 configure.py \
     --cl-lib-dir=/opt/cuda/6.5/lib \
     --cl-libname=OpenCL
 make install
-cd ..
+cd $HOME
 rm -rf pyopencl-2015.1*
 
 #
@@ -125,7 +131,7 @@ mkdir build && cd build
 cmake ../src -DCMAKE_BUILD_TYPE=Release
 make && make install
 cp -r package/* ~/
-cd ../..
+cd $HOME
 rm -rf clBLAS
 
 # Install libgpuarray (optional theano dependencies)
@@ -168,7 +174,7 @@ mkdir Build && cd Build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/
 make
 make install
-cd ../..
+cd $HOME
 rm -rf libgpuarray
 
 # Install theano
@@ -198,7 +204,7 @@ cd hdf5-1.8.14
 ./configure --prefix=$HOME --enable-shared --enable-hl
 make
 make install
-cd ..
+cd $HOME
 rm -rf hdf5-1.8.14*
 
 # Install netCDF4 (netCDF4-python dependency) 
@@ -208,7 +214,7 @@ cd netcdf-4.3.3
 ./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=$HOME
 make
 make install
-cd ..
+cd $HOME
 rm -rf netcdf-4.3.3*
 
 # Install netCDF4-python
@@ -216,5 +222,5 @@ wget https://pypi.python.org/packages/source/n/netCDF4/netCDF4-1.1.5.tar.gz
 tar -xzf netCDF4-1.1.5.tar.gz
 cd netCDF4-1.1.5
 python setup.py install
-cd ..
+cd $HOME
 rm -rf netCDF4-1.1.5*
