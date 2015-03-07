@@ -49,6 +49,7 @@ pip3 install -U scipy
 #
 
 # Install sip (dependency for PyQt4)
+wgetretry http://sourceforge.net/projects/pyqt/files/sip/sip-4.16.6/sip-4.16.6.zip
 unzip -q sip-4.16.6.zip
 cd sip-4.16.6
 python3 configure.py
