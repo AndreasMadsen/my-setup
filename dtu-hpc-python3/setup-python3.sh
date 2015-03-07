@@ -3,6 +3,8 @@
 #PBS -N setup-python3
 #PBS -l walltime=01:30:00
 #PBS -l nodes=1:ppn=1:gpus=1
+#PBS -j oe
+#PBS -o setup-python3.log
 
 # Stop on error
 set -e
