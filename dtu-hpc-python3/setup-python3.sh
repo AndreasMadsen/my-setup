@@ -236,3 +236,12 @@ cd netCDF4-1.1.5
 python setup.py install
 cd $HOME
 rm -rf netCDF4-1.1.5*
+
+# DONE
+cat <<EOF
+####################################
+##                                ##
+##       python3 installed        ## 
+##                                ##
+####################################
+EOF
