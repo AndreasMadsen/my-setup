@@ -9,6 +9,13 @@
 # Stop on error
 set -e
 
+# Retry wget errors (20 times) (e.q. 504)
+# sourceforge in particular is not very stable
+function wgetretry {
+    wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 ||
+    wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1
+}
+
 # Load already installed software
 module load python3
 module load gcc
@@ -23,13 +30,13 @@ export CXX='g++ -w'
 # Setup cuda path for clBLAS
 export CUDA_PATH=/opt/cuda/6.5
 
+# Use HOME directory as base
+cd $HOME
+
 # Setup virtual env
 export PYTHONPATH=
 pyvenv ~/stdpy3 --copies
 source ~/stdpy3/bin/activate
-
-# Use HOME directory as base
-cd $HOME
 
 #
 # Install basic python math
@@ -42,7 +49,6 @@ pip3 install -U scipy
 #
 
 # Install sip (dependency for PyQt4)
-wget http://sourceforge.net/projects/pyqt/files/sip/sip-4.16.6/sip-4.16.6.zip
 unzip -q sip-4.16.6.zip
 cd sip-4.16.6
 python3 configure.py
@@ -52,7 +58,7 @@ cd $HOME
 rm -rf sip-4.16.6*
 
 # Install PyQt4 (optional backend for matplotlib)
-wget http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.3/PyQt-x11-gpl-4.11.3.tar.gz
+wgetretry http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.3/PyQt-x11-gpl-4.11.3.tar.gz
 tar -xf PyQt-x11-gpl-4.11.3.tar.gz
 cd PyQt-x11-gpl-4.11.3
 python3 configure.py --confirm-license
@@ -65,7 +71,7 @@ rm -rf PyQt-x11-gpl-4.11.3*
 pip3 install -U matplotlib
 
 # Install basemap (matplotlib extension)
-wget http://downloads.sourceforge.net/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz
+wgetretry http://downloads.sourceforge.net/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz
 tar -xf basemap-1.0.7.tar.gz 
 cd basemap-1.0.7
 cd geos-3.3.3
@@ -91,7 +97,7 @@ pip3 install -U pandas
 pip3 install -U mako
 
 # Install pyOpenCL
-wget https://pypi.python.org/packages/source/p/pyopencl/pyopencl-2015.1.tar.gz
+wgetretry https://pypi.python.org/packages/source/p/pyopencl/pyopencl-2015.1.tar.gz
 tar -xf pyopencl-2015.1.tar.gz
 cd pyopencl-2015.1
 python3 configure.py \
@@ -198,7 +204,7 @@ EOF
 #
 
 # Install HDF5 (netCDF4 dependency) 
-wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar
+wgetretry http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar
 tar -xf hdf5-1.8.14.tar
 cd hdf5-1.8.14
 ./configure --prefix=$HOME --enable-shared --enable-hl
@@ -208,7 +214,7 @@ cd $HOME
 rm -rf hdf5-1.8.14*
 
 # Install netCDF4 (netCDF4-python dependency) 
-wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.tar.gz
+wgetretry ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.tar.gz
 tar -xzf netcdf-4.3.3.tar.gz
 cd netcdf-4.3.3
 ./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=$HOME
@@ -218,7 +224,7 @@ cd $HOME
 rm -rf netcdf-4.3.3*
 
 # Install netCDF4-python
-wget https://pypi.python.org/packages/source/n/netCDF4/netCDF4-1.1.5.tar.gz
+wgetretry https://pypi.python.org/packages/source/n/netCDF4/netCDF4-1.1.5.tar.gz
 tar -xzf netCDF4-1.1.5.tar.gz
 cd netCDF4-1.1.5
 python setup.py install
