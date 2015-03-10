@@ -8,6 +8,10 @@ This is a guide for how to set up your terminal so it looks exactly like mine.
 The end result should be this:
 ![Terminal setup example](https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/mac-terminal/example.png)
 
+## [Mac – Python 3.4](mac-python3)
+
+Install script for python 3 on Mac OS X, for most scientific stuff.
+
 ## [Latex Template](latex-template)
 
 A template for LaTeX I have been continuously developing over a few years.
