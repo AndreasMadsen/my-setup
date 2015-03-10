@@ -78,13 +78,16 @@ mkdir build && cd build
 cmake ../src -DCMAKE_BUILD_TYPE=Release
 make && make install
 cp -r package/* /usr/local/
+cp -r package/lib64/* /usr/local/lib/
 cd ../..
 rm -rf clBLAS
 
 # Install libgpuarray
+pip3 install cython
+pip3 install tools
 git clone https://github.com/Theano/libgpuarray.git
 cd libgpuarray
-patch -f <<EOF
+patch -f CMakeLists.txt <<EOF
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -11,7 +11,7 @@
@@ -101,11 +104,13 @@ mkdir Build && cd Build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64
 make
 make install
-cd ../..
+cd ..
+python3 setup.py install
+cd ..
 rm -rf libgpuarray
 
 # Install theano
-pip3 install theano
+pip3 install theano=dev
 
 # Configure theano
 cat > .theanorc <<EOF
