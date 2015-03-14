@@ -16,6 +16,11 @@ Install script for python 3 on Mac OS X, for most scientific stuff.
 
 A template for LaTeX I have been continuously developing over a few years.
 
+## [DTU HPC – Util](dtu-hpc-util)
+
+THE DTU HPC system have quite a lot of legacy. This script updates and install
+the useful stuff.
+
 ## [DTU HPC – Python 3.4](dtu-hpc-python3)
 
 The Danish Technical University (DTU) have a supercomputer
