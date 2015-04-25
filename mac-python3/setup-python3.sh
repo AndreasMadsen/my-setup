@@ -119,6 +119,13 @@ device = gpu
 floatX = float32
 EOF
 
+# Install lasagne (craffel fork)
+git clone https://github.com/craffel/nntools.git
+cd nntools
+python3 setup.py install
+cd ..
+rm -rf nntools
+
 #
 # Install netCDF4
 #
