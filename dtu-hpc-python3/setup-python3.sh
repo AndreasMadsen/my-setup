@@ -85,7 +85,7 @@ cd geos-3.3.3
 make
 make install
 cd ..
-python setup.py install
+python3 setup.py install
 cd $HOME
 rm -rf basemap-1.0.7*
 
@@ -240,7 +240,7 @@ rm -rf netcdf-4.3.3*
 wgetretry https://pypi.python.org/packages/source/n/netCDF4/netCDF4-1.1.5.tar.gz
 tar -xzf netCDF4-1.1.5.tar.gz
 cd netCDF4-1.1.5
-python setup.py install
+python3 setup.py install
 cd $HOME
 rm -rf netCDF4-1.1.5*
 
