@@ -213,7 +213,7 @@ cd ..
 rm -rf nntools
 
 #
-# Install netCDF4-python
+# Install h5py and netCDF4-python
 #
 
 # Install HDF5 (netCDF4 dependency) 
@@ -225,6 +225,10 @@ make
 make install
 cd $HOME
 rm -rf hdf5-1.8.14*
+
+# Install h5py
+pip3 install Cython
+pip3 install h5py
 
 # Install netCDF4 (netCDF4-python dependency) 
 wgetretry ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.tar.gz
