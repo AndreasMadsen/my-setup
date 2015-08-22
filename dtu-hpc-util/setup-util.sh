@@ -66,6 +66,17 @@ make install install-doc
 cd ..
 rm -rf git
 
+# install git autocomplete
+wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -O ~/.git-completion.bash
+
+cat >> .profile <<EOF
+# Enable git autocompletion
+if [ -f ~/.git-completion.bash ] && tty -s ; then
+source ~/.git-completion.bash
+fi
+
+EOF
+
 # DONE
 cat <<EOF
 ####################################
