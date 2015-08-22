@@ -12,6 +12,11 @@ The end result should be this:
 
 Install script for python 3 on Mac OS X, for most scientific stuff.
 
+## [Raspberry Pi 2 – Arch Linux](raspberry-pi-2-arch-linux)
+
+I bought some raspberry PIs as always running crawlers. This is my personal
+notes, on how I did it.
+
 ## [Latex Template](latex-template)
 
 A template for LaTeX I have been continuously developing over a few years.
