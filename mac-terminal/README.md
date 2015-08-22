@@ -70,7 +70,7 @@ At last edit `~/.vimrc.before` and enable `g:airline_powerline_fonts = 1` by unc
 
 1. Install oh-my-zsh using `curl -L http://install.ohmyz.sh | sh`
 2. Edit `~/.zshrc` and set `ZSH_THEME="Agnoster”`
-3. Edit `~/.oh-my-zsh/themes/agnoster.zsh-theme` and uncomment with `#` the `prompt_context` line in the `build_prompt` function.
+3. Also set `DEFAULT_USER` to your username `whoami`
 
 ### More zsh
 
