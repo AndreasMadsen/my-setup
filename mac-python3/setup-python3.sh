@@ -30,7 +30,7 @@ pip3 install --upgrade pip
 #
 brew install numpy --with-python3
 brew link --overwrite numpy
-brew install scipy --with-python3
+brew install scipy --with-python3 --default-fortran-flags
 
 #
 # Install matplotlib (with Qt4, cario and basemap)
