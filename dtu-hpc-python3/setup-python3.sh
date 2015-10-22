@@ -137,8 +137,23 @@ patch -f stdpy3/lib/python3.4/site-packages/dot_parser.py \
 EOF
 
 # Install libgpuarray (optional theano dependencies)
+# Note the HPC version of check.h is old, so ck_assert_ptr_ne is not defined
+# since it is just the test files. Just remove the test.
 git clone https://github.com/Theano/libgpuarray.git
 cd libgpuarray
+patch -f tests/check_array.c \
+<<EOF
+--- check_array.c
++++ check_array.c
+@@ -57,7 +57,6 @@
+   if (dev == -1)
+     ck_abort_msg("Bad test device");
+   ctx = ops->buffer_init(dev, 0, NULL);
+-  ck_assert_ptr_ne(ctx, NULL);
+ }
+
+ void teardown(void) {
+EOF
 mkdir Build && cd Build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/
 make
@@ -163,7 +178,7 @@ flags = -arch=sm_30
 EOF
 
 # Install lasagne (development version)
-pip install git+https://github.com/Lasagne/Lasagne.git
+pip3 install git+https://github.com/Lasagne/Lasagne.git
 
 #
 # Install h5py and netCDF4-python
