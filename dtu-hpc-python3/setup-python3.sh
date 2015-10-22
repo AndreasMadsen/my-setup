@@ -68,7 +68,7 @@ wgetretry http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.3/PyQt-x11-
 tar -xf PyQt-x11-gpl-4.11.3.tar.gz
 cd PyQt-x11-gpl-4.11.3
 python3 configure.py --confirm-license
-make -j4
+make
 make install
 cd $HOME
 rm -rf PyQt-x11-gpl-4.11.3*
@@ -185,36 +185,31 @@ pip3 install git+https://github.com/Lasagne/Lasagne.git
 #
 
 # Install HDF5 (netCDF4 dependency) 
-wgetretry http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar
-tar -xf hdf5-1.8.14.tar
-cd hdf5-1.8.14
+wgetretry http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.15-patch1.tar.gz
+tar -xf hdf5-1.8.15-patch1.tar.gz
+cd hdf5-1.8.15-patch1
 ./configure --prefix=$HOME --enable-shared --enable-hl
 make
 make install
 cd $HOME
-rm -rf hdf5-1.8.14*
+rm -rf hdf5-1.8.15-patch1*
 
 # Install h5py
 pip3 install Cython
 pip3 install h5py
 
 # Install netCDF4 (netCDF4-python dependency) 
-wgetretry ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.tar.gz
-tar -xzf netcdf-4.3.3.tar.gz
-cd netcdf-4.3.3
+wgetretry ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.1.tar.gz
+tar -xzf netcdf-4.3.3.1.tar.gz
+cd netcdf-4.3.3.1
 ./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=$HOME
 make
 make install
 cd $HOME
-rm -rf netcdf-4.3.3*
+rm -rf netcdf-4.3.3.1*
 
 # Install netCDF4-python
-wgetretry https://pypi.python.org/packages/source/n/netCDF4/netCDF4-1.1.5.tar.gz
-tar -xzf netCDF4-1.1.5.tar.gz
-cd netCDF4-1.1.5
-python3 setup.py install
-cd $HOME
-rm -rf netCDF4-1.1.5*
+pip3 install netcdf4
 
 # DONE
 cat <<EOF
