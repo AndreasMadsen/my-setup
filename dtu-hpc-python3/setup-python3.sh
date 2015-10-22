@@ -136,58 +136,9 @@ patch -f stdpy3/lib/python3.4/site-packages/dot_parser.py \
  class P_AttrList:
 EOF
 
-# Install clBLAS (dependency for libgpuarray)
-# clBLAS uses python in a system they call AutoGemm, it really just precompiles
-# some kernal files so it isn't dependent on python after installation.
-module unload python3
-module load python
-git clone https://github.com/clMathLibraries/clBLAS.git
-cd clBLAS
-mkdir build && cd build
-cmake ../src -DCMAKE_BUILD_TYPE=Release
-make && make install
-cp -r package/* ~/
-cd $HOME
-rm -rf clBLAS
-module unload python
-module load python3
-
 # Install libgpuarray (optional theano dependencies)
 git clone https://github.com/Theano/libgpuarray.git
 cd libgpuarray
-patch -f CMakeModules/FindclBLAS.cmake \
-<<EOF
---- a/CMakeModules/FindclBLAS.cmake
-+++ b/CMakeModules/FindclBLAS.cmake
-@@ -8,9 +8,23 @@
-
- FIND_PACKAGE( PackageHandleStandardArgs )
-
--FIND_PATH(CLBLAS_INCLUDE_DIRS clBLAS.h)
--FIND_LIBRARY(CLBLAS_LIBRARIES clBLAS ENV LD_LIBRARY_PATH)
-+FIND_PATH(CLBLAS_INCLUDE_DIRS
-+    NAMES clBLAS.h
-+    HINTS
-+        \$ENV{HOME}/include
-+    PATHS
-+        /usr/include
-+        /usr/local/include
-+)
-+FIND_LIBRARY(CLBLAS_LIBRARIES
-+    NAMES clBLAS
-+    HINTS
-+        \$ENV{HOME}/lib
-+        \$ENV{HOME}/lib64
-+    PATHS
-+        /usr/lib
-+)
-
- FIND_PACKAGE_HANDLE_STANDARD_ARGS(clBLAS DEFAULT_MSG CLBLAS_LIBRARIES CLBLAS_INCLUDE_DIRS)
-
--MARK_AS_ADVANCED(CLBLAS_INCLUDE_DIRS CLBLAS_LIBRARIES)
-\ No newline at end of file
-+MARK_AS_ADVANCED(CLBLAS_INCLUDE_DIRS CLBLAS_LIBRARIES)
-EOF
 mkdir Build && cd Build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/
 make
