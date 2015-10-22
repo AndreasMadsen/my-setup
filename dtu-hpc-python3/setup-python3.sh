@@ -137,6 +137,10 @@ patch -f stdpy3/lib/python3.4/site-packages/dot_parser.py \
 EOF
 
 # Install clBLAS (dependency for libgpuarray)
+# clBLAS uses python in a system they call AutoGemm, it really just precompiles
+# some kernal files so it isn't dependent on python after installation.
+module unload python3
+module load python
 git clone https://github.com/clMathLibraries/clBLAS.git
 cd clBLAS
 mkdir build && cd build
@@ -145,6 +149,8 @@ make && make install
 cp -r package/* ~/
 cd $HOME
 rm -rf clBLAS
+module unload python
+module load python3
 
 # Install libgpuarray (optional theano dependencies)
 git clone https://github.com/Theano/libgpuarray.git
