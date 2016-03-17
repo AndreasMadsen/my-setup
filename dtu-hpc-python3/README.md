@@ -11,10 +11,6 @@ Install python and friends on DTUs shared user system. Included is:
 * Theano (with pydot, clBLAS, libgpuarray)
 * netCDF4
 
-### Note on login
-
-**Note the install part only works when using `hpc-fe.gbar.dtu.dk` as the `ssh` host!** ThinLinc and `login.gbar.dtu.dk` won’t work. This is because `k40sh` is needed to compile the OpenCL and CUDA parts. The SSH guide can be found here: http://gbar.dtu.dk/faq/53-ssh (just be sure to replace `login.gbar.dtu.dk` with `hpc-fe.gbar.dtu.dk`).
-
 ### Run setup script
 
 Type or copy this after connecting with SSH:
