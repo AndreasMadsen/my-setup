@@ -74,7 +74,7 @@ tar -xf PyQt-gpl-5.5.1.tar.gz
 cd PyQt-gpl-5.5.1
 python3 configure.py --confirm-license
 make -j4
-make install
+make install DESTDIR=$HOME INSTALL_ROOT=$HOME
 cd $HOME
 rm -rf PyQt-gpl-5.5.1*
 
