@@ -73,7 +73,7 @@ wgetretry http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.5.1/PyQt-gpl-5
 tar -xf PyQt-gpl-5.5.1.tar.gz
 cd PyQt-gpl-5.5.1
 python3 configure.py --confirm-license
-make
+make -j4
 make install
 cd $HOME
 rm -rf PyQt-gpl-5.5.1*
