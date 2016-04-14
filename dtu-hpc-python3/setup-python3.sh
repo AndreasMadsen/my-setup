@@ -57,10 +57,10 @@ pip3 install -U numpy
 pip3 install -U scipy
 
 #
-# Install matplotlib with Qt4 and basemap enabled
+# Install matplotlib with Qt5 and basemap enabled
 #
 
-# Install sip (dependency for PyQt4)
+# Install sip (dependency for PyQt5)
 wgetretry http://sourceforge.net/projects/pyqt/files/sip/sip-4.17/sip-4.17.tar.gz
 tar -xf sip-4.17.tar.gz
 cd sip-4.17
