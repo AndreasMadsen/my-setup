@@ -257,8 +257,8 @@ pip3 install git+https://github.com/Lasagne/Lasagne.git
 #
 
 # Install HDF5 (netCDF4 dependency)
-wgetretry http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.16.tar
-tar -xf hdf5-1.8.16.tar
+wgetretry http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.16.tar.gz
+tar -xf hdf5-1.8.16.tar.gz
 cd hdf5-1.8.16
 ./configure --prefix=$HOME --enable-shared --enable-hl
 make -j4
@@ -272,7 +272,7 @@ pip3 install h5py
 
 # Install netCDF4 (netCDF4-python dependency)
 wgetretry ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.4.0.tar.gz
-tar -xzf netcdf-4.4.0.tar.gz
+tar -xf netcdf-4.4.0.tar.gz
 cd netcdf-4.4.0
 ./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=$HOME
 make -j4
