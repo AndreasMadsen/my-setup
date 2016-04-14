@@ -23,10 +23,12 @@ function wgetretry {
 }
 
 # Load already installed software
-module load python3
 module unload gcc
+module unload cuda
+
+module load python3
 module load gcc/4.9.2
-module load cuda
+module load cuda/7.0
 module load qt
 module load boost
 
@@ -34,8 +36,8 @@ module load boost
 export CC='gcc -w'
 export CXX='g++ -w'
 
-# Setup cuda path for clBLAS
-export CUDA_PATH=/opt/cuda/6.5
+# Setup cuda path for theano
+export CUDA_PATH='/appl/cuda/7.0'
 
 # Expand path
 export PATH="$HOME/bin:$PATH"
@@ -162,11 +164,12 @@ make install
 cd $HOME
 rm -rf cmake-3.5.1*
 
-# Install libgpuarray (optional theano dependencies)
+# Install libgpuarray (optional theano dependency)
 # Note the HPC version of check.h is old, so ck_assert_ptr_ne is not defined
 # since it is just the test files. Just remove the test.
 git clone https://github.com/Theano/libgpuarray.git
 cd libgpuarray
+git checkout 99a51ba43bb05eb2c6f848439867dce0f05fca5f
 patch -f tests/check_array.c \
 <<EOF
 --- check_array.c
@@ -177,57 +180,48 @@ patch -f tests/check_array.c \
    ctx = ops->buffer_init(dev, 0, NULL);
 -  ck_assert_ptr_ne(ctx, NULL);
  }
+
  void teardown(void) {
 EOF
 patch -f tests/check_util.c \
 <<EOF
 --- check_util.c
 +++ check_util.c
-@@ -60,8 +60,8 @@
+@@ -60,8 +60,6 @@
    strs[1][2] = 4;
 
    gpuarray_elemwise_collapse(2, &nd, dims, strs);
 -  ck_assert_uint_eq(nd, 1);
 -  ck_assert_uint_eq(dims[0], 1000);
-+  //ck_assert_uint_eq(nd, 1);
-+  //ck_assert_uint_eq(dims[0], 1000);
    ck_assert_int_eq(strs[0][0], 4);
    ck_assert_int_eq(strs[1][0], 4);
 
-@@ -77,9 +77,9 @@
+@@ -77,9 +75,6 @@
    strs[1][2] = 4;
 
    gpuarray_elemwise_collapse(2, &nd, dims, strs);
 -  ck_assert_uint_eq(nd, 2);
 -  ck_assert_uint_eq(dims[0], 50);
 -  ck_assert_uint_eq(dims[1], 20);
-+  //ck_assert_uint_eq(nd, 2);
-+  //ck_assert_uint_eq(dims[0], 50);
-+  //ck_assert_uint_eq(dims[1], 20);
    ck_assert_int_eq(strs[0][0], 168);
    ck_assert_int_eq(strs[0][1], 4);
    ck_assert_int_eq(strs[1][0], 80);
-@@ -97,9 +97,9 @@
+@@ -97,9 +92,6 @@
    strs[1][2] = 80;
 
    gpuarray_elemwise_collapse(2, &nd, dims, strs);
 -  ck_assert_uint_eq(nd, 2);
 -  ck_assert_uint_eq(dims[0], 20);
 -  ck_assert_uint_eq(dims[1], 50);
-+  //ck_assert_uint_eq(nd, 2);
-+  //ck_assert_uint_eq(dims[0], 20);
-+  //ck_assert_uint_eq(dims[1], 50);
    ck_assert_int_eq(strs[0][0], 4);
    ck_assert_int_eq(strs[0][1], 168);
    ck_assert_int_eq(strs[1][0], 4);
-@@ -112,8 +112,8 @@
+@@ -112,8 +104,6 @@
    strs[0][1] = 4;
 
    gpuarray_elemwise_collapse(1, &nd, dims, strs);
 -  ck_assert_uint_eq(nd, 1);
 -  ck_assert_uint_eq(dims[0], 1);
-+  //ck_assert_uint_eq(nd, 1);
-+  //ck_assert_uint_eq(dims[0], 1);
    ck_assert_int_eq(strs[0][0], 4);
  }
  END_TEST
