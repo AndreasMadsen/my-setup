@@ -299,14 +299,14 @@ pip3 install Cython
 pip3 install h5py
 
 # Install netCDF4 (netCDF4-python dependency)
-wgetretry ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.4.0.tar.gz
-tar -xf netcdf-4.4.0.tar.gz
-cd netcdf-4.4.0
+wgetretry ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.1.tar.gz
+tar -xf netcdf-4.3.3.1.tar.gz
+cd netcdf-4.3.3.1
 ./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=$HOME
 make -j4
 make install
 cd $HOME
-rm -rf netcdf-4.4.0*
+rm -rf netcdf-4.3.3.1*
 
 # Install netCDF4-python
 pip3 install netcdf4
