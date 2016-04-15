@@ -75,8 +75,36 @@ wgetretry http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.5.1/PyQt-gpl-5
 tar -xf PyQt-gpl-5.5.1.tar.gz
 cd PyQt-gpl-5.5.1
 python3 configure.py --confirm-license
+# For some unknow reason the qt5 designer installs in the wrong path,
+# fortunately it isn't needed so just remove the install target
+patch -f designer/Makefile \
+<<EOF
+--- designer/Makefile
++++ designer/Makefile
+@@ -1694,7 +1694,7 @@
+ 	-$(DEL_DIR) $(INSTALL_ROOT)/appl/qt/5.5.0/plugins/designer/
+
+
+-install: install_target  FORCE
++install: FORCE
+
+ uninstall: uninstall_target  FORCE
+EOF
+patch -f qmlscene/Makefile \
+<<EOF
+--- qmlscene/Makefile
++++ qmlscene/Makefile
+@@ -829,7 +829,7 @@
+ 	-$(DEL_DIR) $(INSTALL_ROOT)/appl/qt/5.5.0/plugins/PyQt5/
+
+
+-install: install_target  FORCE
++install: FORCE
+
+ uninstall: uninstall_target  FORCE
+EOF
 make -j4
-make install DESTDIR=$HOME INSTALL_ROOT=$HOME
+make install
 cd $HOME
 rm -rf PyQt-gpl-5.5.1*
 
