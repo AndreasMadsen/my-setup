@@ -4,11 +4,11 @@ Install python and friends on DTUs shared user system. Included is:
 
 * numpy
 * scipy
-* matplotlib (with Qt4 and basemap)
+* matplotlib (with Qt5 and basemap)
 * scikit-learn
 * pandas
 * PyOpenCL (with mako)
-* Theano (with pydot, clBLAS, libgpuarray)
+* Theano (with pydot and libgpuarray)
 * netCDF4
 
 ### Run setup script
@@ -32,9 +32,9 @@ For any future login and after the installation run one of these:
 ```shell
 k40sh
 module load python3
-module load gcc
+module load gcc/4.9.2
+module load cuda/7.0
 module load qt
-module load cuda
 export PYTHONPATH=
 source ~/stdpy3/bin/activate
 ```
@@ -44,7 +44,7 @@ source ~/stdpy3/bin/activate
 ```shell
 qrsh
 module load python3
-module load gcc
+module load gcc/4.9.2
 module load qt
 export PYTHONPATH=
 source ~/stdpy3/bin/activate
@@ -54,7 +54,7 @@ You can make this happen automatically for all shell-login, just run:
 
 ```shell
 cat >> .gbarrc <<EOF
-MODULES=python3,gcc,qt,cuda
+MODULES=python3,gcc/4.9.2,qt,cuda/7.0
 EOF
 cat >> .profile <<EOF
 # Setup local python3
