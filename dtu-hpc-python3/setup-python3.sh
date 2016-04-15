@@ -137,7 +137,7 @@ pip3 install -U pandas
 # Install mako (optional dependency for pyopencl)
 pip3 install -U mako
 
-# Install ctags
+# Install ctags (dependency for pyopencl)
 wgetretry http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz
 tar -xf ctags-5.8.tar.gz
 cd ctags-5.8
@@ -182,7 +182,7 @@ patch -f stdpy3/lib/python3.4/site-packages/dot_parser.py \
  class P_AttrList:
 EOF
 
-# Upgrade cmake
+# Upgrade cmake (libgpuarray dependency)
 wgetretry https://cmake.org/files/v3.5/cmake-3.5.1.tar.gz
 tar -xf cmake-3.5.1.tar.gz
 cd cmake-3.5.1
@@ -261,7 +261,7 @@ make install
 cd $HOME
 rm -rf libgpuarray
 
-# Install theano
+# Install theano (development version)
 pip3 install git+https://github.com/Theano/Theano.git
 
 # Configure theano
