@@ -273,8 +273,8 @@ floatX = float32
 [cuda]
 root = $CUDA_PATH
 
-[nvcc]
-flags = -arch=sm_30
+[lib]
+cnmem = 1
 EOF
 
 # Install lasagne (development version)
