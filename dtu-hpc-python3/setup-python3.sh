@@ -28,7 +28,7 @@ module unload cuda
 
 module load python3
 module load gcc/4.9.2
-module load cuda/7.0
+module load cuda/7.5
 module load qt
 module load boost
 
@@ -37,7 +37,7 @@ export CC='gcc -w'
 export CXX='g++ -w'
 
 # Setup cuda path for theano
-export CUDA_PATH='/appl/cuda/7.0'
+export CUDA_PATH='/appl/cuda/7.5'
 
 # Expand path
 export PATH="$HOME/bin:$PATH"

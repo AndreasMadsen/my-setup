@@ -33,7 +33,7 @@ For any future login and after the installation run one of these:
 k40sh
 module load python3
 module load gcc/4.9.2
-module load cuda/7.0
+module load cuda/7.5
 module load qt
 export PYTHONPATH=
 source ~/stdpy3/bin/activate
@@ -54,7 +54,7 @@ You can make this happen automatically for all shell-login, just run:
 
 ```shell
 cat >> .gbarrc <<EOF
-MODULES=python3,gcc/4.9.2,qt,cuda/7.0
+MODULES=python3,gcc/4.9.2,qt,cuda/7.5
 EOF
 cat >> .profile <<EOF
 # Setup local python3
