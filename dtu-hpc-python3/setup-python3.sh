@@ -25,10 +25,12 @@ function wgetretry {
 # Load already installed software
 module unload gcc
 module unload cuda
+module unload cudnn
 
 module load python3
 module load gcc/4.9.2
 module load cuda/7.5
+module load cudnn/v5.0-prod
 module load qt
 module load boost
 
@@ -38,6 +40,7 @@ export CXX='g++ -w'
 
 # Setup cuda path for theano
 export CUDA_PATH='/appl/cuda/7.5'
+export CUDNN_PATH='/appl/cudnn/v5.0-prod'
 
 # Expand path
 export PATH="$HOME/bin:$PATH"
@@ -275,6 +278,11 @@ root = $CUDA_PATH
 
 [lib]
 cnmem = 1
+
+[dnn]
+enabled = True
+include_path = $CUDNN_PATH/include
+library_path = $CUDNN_PATH/lib64
 EOF
 
 # Install lasagne (development version)
