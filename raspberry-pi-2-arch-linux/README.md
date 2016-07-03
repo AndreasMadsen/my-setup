@@ -68,6 +68,16 @@ http://archlinuxarm.org/forum/viewtopic.php?f=53&t=7758
 8. Insert the SD card into the Raspberry Pi, connect ethernet, and apply 5V power.
 ```
 
+## setup keybord
+
+https://wiki.archlinux.org/index.php/Keyboard_configuration_in_console
+
+```bash
+touch /etc/vconsole.conf
+localectl list-keymaps # select a $keymap from this list
+localectl set-keymap $keymap
+```
+
 ## setup wifi
 
 #### 1. Configure WiFi SSID and password
