@@ -68,6 +68,11 @@ http://archlinuxarm.org/forum/viewtopic.php?f=53&t=7758
 8. Insert the SD card into the Raspberry Pi, connect ethernet, and apply 5V power.
 ```
 
+## Login
+
+username: `root`
+password: `root`
+
 ## setup keybord
 
 https://wiki.archlinux.org/index.php/Keyboard_configuration_in_console
@@ -76,6 +81,14 @@ https://wiki.archlinux.org/index.php/Keyboard_configuration_in_console
 touch /etc/vconsole.conf
 localectl list-keymaps # select a $keymap from this list
 localectl set-keymap $keymap
+```
+
+## Connect to root using ssh
+
+Edit `/etc/ssh/sshd_config` and set
+
+```
+PermitRootLogin yes
 ```
 
 ## setup wifi
