@@ -354,7 +354,43 @@ edit `~/.zshrc` and set ZSH_THEME="agnoster"
 ## Update packages
 
 ```bash
-pacman -Syu
+sudo pacman -Syu
+```
+
+## GUI
+
+* https://archlinuxarm.org/forum/viewtopic.php?f=9&t=7334
+* https://wiki.archlinux.org/index.php/Xfce
+
+to install `xfce4`
+
+```bash
+sudo pacman -Syu xorg-server xorg-xinit xf86-video-fbdev
+sudo pacman -Syu xfce4
+```
+
+and set:
+
+```bash
+cat ~/.xinitrc
+exec startxfce4
+```
+
+to start run `xinit`. To automatically start on boot, run:
+
+```bash
+sudo pacman -Syu lightdm
+sudo pacman -Syu lightdm-gtk-greeter
+sudo systemctl start lightdm.service
+```
+
+and set:
+```
+cat /etc/lightdm/lightdm.conf
+
+...
+greeter-session=lightdm-gtk-greeter
+...
 ```
 
 ## TODO: Customize LED
