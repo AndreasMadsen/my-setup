@@ -389,7 +389,7 @@ To automatically start on boot, run:
 
 ```bash
 sudo pacman -Syu lightdm lightdm-gtk-greeter
-sudo systemctl start lightdm.service
+sudo systemctl enable lightdm.service
 ```
 
 and set:
