@@ -388,8 +388,7 @@ to start run `xinit`.
 To automatically start on boot, run:
 
 ```bash
-sudo pacman -Syu lightdm
-sudo pacman -Syu lightdm-gtk-greeter
+sudo pacman -Syu lightdm lightdm-gtk-greeter
 sudo systemctl start lightdm.service
 ```
 
