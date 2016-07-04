@@ -57,10 +57,11 @@ http://archlinuxarm.org/forum/viewtopic.php?f=53&t=7758
 5. Download and extract the root filesystem (as root, not via sudo):
     cd root
     wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
-    tar -xzvf ArchLinuxARM-kirkwood-latest.tar.gz
-    rm ArchLinuxARM-kirkwood-latest.tar.gz
+    tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz
+    rm ArchLinuxARM-rpi-2-latest.tar.gz
     sync
 6. Move boot files to the first partition:
+    cd ..
     mv root/boot/* boot
     sync
 7. Unmount the two partitions:
