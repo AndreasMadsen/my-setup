@@ -359,6 +359,8 @@ sudo pacman -Syu
 
 ## GUI
 
+#### 1. setup xfce4
+
 * https://archlinuxarm.org/forum/viewtopic.php?f=9&t=7334
 * https://wiki.archlinux.org/index.php/Xfce
 
@@ -376,7 +378,11 @@ cat ~/.xinitrc
 exec startxfce4
 ```
 
-to start run `xinit`. To automatically start on boot, run:
+to start run `xinit`.
+
+#### 2. setup lighdm and greeter
+
+To automatically start on boot, run:
 
 ```bash
 sudo pacman -Syu lightdm
@@ -388,9 +394,19 @@ and set:
 ```
 cat /etc/lightdm/lightdm.conf
 
-...
+[Seat:*]
 greeter-session=lightdm-gtk-greeter
-...
+```
+
+#### 3. set lighdm background
+
+Just for ful the `lightdm` background can be set to: 
+
+```
+cat /etc/lightdm/lightdm-gtk-greeter.conf
+
+[greeter]
+background=/usr/share/backgrounds/xfce/xfce-teal.jpg
 ```
 
 ## TODO: Customize LED
