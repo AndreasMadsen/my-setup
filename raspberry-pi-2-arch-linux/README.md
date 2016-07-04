@@ -328,12 +328,6 @@ sudo pacman -Syu vim git zsh
 curl http://j.mp/spf13-vim3 -L -o - | sh
 ```
 
-Edit `~/.vimrc.before` and enable:
-
-```
-g:airline_powerline_fonts = 1
-```
-
 #### 3. git
 
 ```bash
@@ -348,6 +342,14 @@ git config --global color.ui auto
 ```bash
 curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
 chsh -s $(grep /zsh$ /etc/shells | tail -1)
+```
+
+#### optional: 5. power font
+
+Edit `~/.vimrc.before` and enable:
+
+```
+g:airline_powerline_fonts = 1
 ```
 
 edit `~/.zshrc` and set ZSH_THEME="agnoster"
@@ -401,7 +403,7 @@ greeter-session=lightdm-gtk-greeter
 
 #### 3. set lighdm background
 
-Just for ful the `lightdm` background can be set to: 
+Just for fun the `lightdm` background can be set to: 
 
 ```
 cat /etc/lightdm/lightdm-gtk-greeter.conf
