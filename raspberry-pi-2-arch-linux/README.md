@@ -224,28 +224,38 @@ $ fdisk /dev/sda
 
 a. Type o. This will clear out any partitions on the drive.
 b. Type p to list partitions. There should be no partitions left.
-c. Type n, then p for primary, 1 for the second partition on the drive, and then press ENTER twice to accept the default first and last sector.
-d. Write the partition table and exit by typing w.
+c. Type n, then p for primary, 1 for the first partition on the drive, press ENTER to accept the default first sector, then type +4G for the last sector.
+d. Type t, then 82 to set the first partition to type Linux swap / Solaris.
+e. Type n, then p for primary, 2 for the second partition on the drive, and then press ENTER twice to accept the default first and last sector.
+f. Write the partition table and exit by typing w.
 ```
 
 Format disk:
 
 ```bash
-mkfs.ext4 /dev/sda1
+mkswap /dev/sda1
+mkfs.ext4 /dev/sda2
+```
+
+Activate swap
+
+```
+swapon /dev/sda1
 ```
 
 #### 2. Setup to mount on boot
 https://wiki.archlinux.org/index.php/Fstab
 
-Find the UUID by `ls -l /dev/disk/by-uuid/` (e.g. `d74dc02d-20da-4a52-b37f-5ec09466f37b`).
+Find the UUIDs by `ls -l /dev/disk/by-uuid/` (e.g. `c0f6c63b-aae7-4dca-b8a6-504e0a325bdf`).
 
 ```
 $ cat /etc/fstab
 
 # <file system>                            <dir> <type> <options>         <dump> <pass>
-/dev/mmcblk0p1                             /boot vfat   defaults,noatime  0      0
-/dev/mmcblk0p2                             /     ext4   defaults,noatime  0      0
-UUID=d74dc02d-20da-4a52-b37f-5ec09466f37b  /home ext4   defaults          0      2
+/dev/mmcblk0p1                             /boot vfat   defaults,noatime  0      2
+/dev/mmcblk0p2                             /     ext4   defaults,noatime  0      1
+UUID=c0f6c63b-aae7-4dca-b8a6-504e0a325bdf  /home ext4   defaults          0      2
+UUID=1170b246-1ddd-4054-8511-bf48f66f90d4  none  swap   defaults          0      0
 ```
 
 ## Enable Firewall
