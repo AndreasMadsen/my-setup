@@ -411,5 +411,23 @@ cat /etc/lightdm/lightdm-gtk-greeter.conf
 background=/usr/share/backgrounds/xfce/xfce-teal.jpg
 ```
 
+## Audio
+
+* https://wiki.archlinux.org/index.php/Raspberry_Pi
+* https://github.com/phortx/Raspberry-Pi-Setup-Guide
+
+```
+sudo pacman -Syu alsa-firmware alsa-lib alsa-utils
+sudo pacman -Syu xfce4-mixer
+```
+
+and add:
+
+```
+cat /boot/config.txt
+...
+dtparam=audio=on
+```
+
 ## TODO: Customize LED
 http://www.midwesternmac.com/blogs/jeff-geerling/controlling-both-pwr-and-act
