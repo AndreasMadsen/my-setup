@@ -415,6 +415,7 @@ background=/usr/share/backgrounds/xfce/xfce-teal.jpg
 
 * https://wiki.archlinux.org/index.php/Raspberry_Pi
 * https://github.com/phortx/Raspberry-Pi-Setup-Guide
+* https://github.com/raspberrypi/firmware/issues/380
 
 ```
 sudo pacman -Syu alsa-firmware alsa-lib alsa-utils
@@ -427,6 +428,7 @@ and add:
 cat /boot/config.txt
 ...
 dtparam=audio=on
+disable_audio_dither=1
 ```
 
 ## TODO: Customize LED
