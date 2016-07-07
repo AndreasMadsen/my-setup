@@ -210,10 +210,8 @@ To check settings type `locale`.
 
 ## Setup USB drive
 
-http://askubuntu.com/questions/154180/how-to-mount-a-new-drive-on-startup
-http://www.raspberrypi-spy.co.uk/2014/05/how-to-mount-a-usb-flash-disk-on-the-raspberry-pi/
-
-**TODO:** add partition as a swap space.
+* http://askubuntu.com/questions/154180/how-to-mount-a-new-drive-on-startup
+* http://www.raspberrypi-spy.co.uk/2014/05/how-to-mount-a-usb-flash-disk-on-the-raspberry-pi/
 
 #### 1. Format USB drive
 
