@@ -362,7 +362,15 @@ g:airline_powerline_fonts = 1
 
 edit `~/.zshrc` and set ZSH_THEME="agnoster"
 
-## Update packages
+## Pacman
+
+enable colors
+
+```
+sudo sed -i 's/#Color/Color/' /etc/pacman.conf # Add color to pacman
+```
+
+update packages
 
 ```bash
 sudo pacman -Syu
