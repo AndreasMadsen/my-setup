@@ -352,16 +352,6 @@ curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | 
 chsh -s $(grep /zsh$ /etc/shells | tail -1)
 ```
 
-#### optional: 5. power font
-
-Edit `~/.vimrc.before` and enable:
-
-```
-g:airline_powerline_fonts = 1
-```
-
-edit `~/.zshrc` and set ZSH_THEME="agnoster"
-
 ## Pacman
 
 enable colors
