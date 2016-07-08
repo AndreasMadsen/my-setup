@@ -451,9 +451,7 @@ disable_audio_dither=1
 
 ## Yaourt
 
-The AUR package manager
-
-#### 1. install
+Install the AUR package manager
 
 ```shell
 wget https://aur.archlinux.org/cgit/aur.git/snapshot/package-query.tar.gz
@@ -470,12 +468,39 @@ cd ../
 rm -rf package-query/ package-query.tar.gz yaourt/ yaourt.tar.gz
 ```
 
-#### 2. usage
+## Powerline
 
-Install Andale Mono font (used by gvim)
+#### 1. Install font
 
 ```
-yaourt ttf-ms-font
+git clone https://github.com/powerline/fonts.git
+cd fonts
+sh install.sh
+cd ..
+rm -rf fonts
+```
+
+#### 2. Setup terminal
+
+Select `Source Code Pro for Powerline, Regular, 10pt` in `Edit -> Preferences -> Appearance -> Font`.
+
+Edit `~/.zshrc`
+
+```
+cat ~/.zshrc
+...
+ZSH_THEME="agnoster"
+DEFAULT_USER="pi"
+```
+
+#### 3. Setup vim
+
+Edit `~/.vimrc` such
+* uncomment `let g:airline_powerline_fonts=1`
+* `prepend` `Source\ Code\ Pro\ for\ Powerline\ 10,` to `set guifont` such it is:
+
+```
+set guifont=Source\ Code\ Pro\ for\ Powerline\ 10,Andale\ Mono\ Regular\ 12,Menlo\ Regular\ 11,Consolas\ Regular\ 12,Courier\ New\ Regular\ 14
 ```
 
 ## TODO: Customize LED
