@@ -327,7 +327,7 @@ PermitRootLogin no
 #### 1. install
 
 ```bash
-sudo pacman -Syu vim git zsh
+sudo pacman -Syu gvim git zsh
 ```
 
 #### 2. vim
@@ -429,6 +429,8 @@ background=/usr/share/backgrounds/xfce/xfce-teal.jpg
 
 ## Audio
 
+_There is a lot of noise, I'm not sure why._
+
 * https://wiki.archlinux.org/index.php/Raspberry_Pi
 * https://github.com/phortx/Raspberry-Pi-Setup-Guide
 * https://github.com/raspberrypi/firmware/issues/380
@@ -445,6 +447,35 @@ cat /boot/config.txt
 ...
 dtparam=audio=on
 disable_audio_dither=1
+```
+
+## Yaourt
+
+The AUR package manager
+
+#### 1. install
+
+```shell
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/package-query.tar.gz
+tar -xvzf package-query.tar.gz
+cd package-query
+makepkg -si
+cd ..
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/yaourt.tar.gz
+tar -xvzf yaourt.tar.gz
+cd yaourt
+makepkg -si
+
+cd ../
+rm -rf package-query/ package-query.tar.gz yaourt/ yaourt.tar.gz
+```
+
+#### 2. usage
+
+Install Andale Mono font (used by gvim)
+
+```
+yaourt ttf-ms-font
 ```
 
 ## TODO: Customize LED
