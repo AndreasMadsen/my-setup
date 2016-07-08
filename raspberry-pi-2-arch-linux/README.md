@@ -327,8 +327,10 @@ PermitRootLogin no
 #### 1. install
 
 ```bash
-sudo pacman -Syu gvim git zsh
+sudo pacman -Syu gvim lua git zsh
 ```
+
+_lua is an optional dependency of vim, required for autocompletion_
 
 #### 2. vim
 
