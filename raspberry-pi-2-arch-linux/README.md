@@ -497,7 +497,7 @@ DEFAULT_USER="pi"
 
 Edit `~/.vimrc` such
 * uncomment `let g:airline_powerline_fonts=1`
-* `prepend` `Source\ Code\ Pro\ for\ Powerline\ 10,` to `set guifont` such it is:
+* prepend `Source\ Code\ Pro\ for\ Powerline\ 10,` to `set guifont` such it is:
 
 ```
 set guifont=Source\ Code\ Pro\ for\ Powerline\ 10,Andale\ Mono\ Regular\ 12,Menlo\ Regular\ 11,Consolas\ Regular\ 12,Courier\ New\ Regular\ 14
