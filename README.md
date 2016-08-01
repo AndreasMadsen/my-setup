@@ -8,7 +8,7 @@ This is a guide for how to set up your terminal so it looks exactly like mine.
 The end result should be this:
 ![Terminal setup example](https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/mac-terminal/example.png)
 
-## [Mac – Python 3.4](mac-python3)
+## [Mac – Python 3.5](mac-python3)
 
 Install script for python 3 on Mac OS X, for most scientific stuff.
 
@@ -26,7 +26,7 @@ A template for LaTeX I have been continuously developing over a few years.
 THE DTU HPC system have quite a lot of legacy. This script updates and install
 the useful stuff.
 
-## [DTU HPC – Python 3.4](dtu-hpc-python3)
+## [DTU HPC – Python 3.5](dtu-hpc-python3)
 
 The Danish Technical University (DTU) have a supercomputer
 (see http://www.cc.dtu.dk/). I use this quite extensively for heavy computation
@@ -36,5 +36,5 @@ an automated setup script for python.
 
 ## [DTU HPC – Python 2.7](dtu-hpc-python2)
 
-Similar to [DTU HPC – Python 3.4](dtu-hpc-python3) but for python 2.7. I
+Similar to [DTU HPC – Python 3.5](dtu-hpc-python3) but for python 2.7. I
 no longer maintain this and suggest you use python 3.4.
