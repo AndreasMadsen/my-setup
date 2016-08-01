@@ -1,4 +1,4 @@
-# Mac – Python 3.4
+# Mac – Python 3.5
 
 Install python and friends on Mac OS X. This is similar to the `DTU_HPC_python3`
 install scripts, but is not as well tested. Included is:
