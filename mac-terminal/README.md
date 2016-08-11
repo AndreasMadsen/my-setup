@@ -58,10 +58,11 @@ Download and install [iTerm2](http://www.iterm2.com/)
 Run this:
 
 ```shell
-brew install vim
+brew install macvim --with-lua --with-override-system-vim
+brew linkapps macvim
 echo export PATH='/usr/local/bin:$PATH' >> ~/.bash_profile
 curl http://j.mp/spf13-vim3 -L -o - | sh
-git config --global core.editor /usr/bin/vim
+git config --global core.editor /usr/local/bin/vim
 ```
 
 At last edit `~/.vimrc.before` and enable `g:airline_powerline_fonts = 1` by uncommenting that line (remove `"`)
