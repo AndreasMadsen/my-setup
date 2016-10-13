@@ -1,4 +1,4 @@
-# DTU HPC – Python 3.4
+# DTU HPC – Python 3.5
 
 Install python and friends on DTUs shared user system. Included is:
 
@@ -8,8 +8,7 @@ Install python and friends on DTUs shared user system. Included is:
 * scikit-learn
 * pandas
 * PyOpenCL (with mako)
-* Theano (with pydot, libgpuarray, cuda 7.5 and cuDNN 5)
-* netCDF4
+* Theano (with pydot, libgpuarray, cuda 8.0 and cuDNN 5)
 
 ### Run setup script
 
@@ -33,7 +32,7 @@ For any future login and after the installation run one of these:
 k40sh
 module load python3
 module load gcc/4.9.2
-module load cuda/7.5
+module load cuda/8.0
 module load cudnn/v5.0-prod
 module load qt
 export PYTHONPATH=
@@ -55,7 +54,7 @@ You can make this happen automatically for all shell-login, just run:
 
 ```shell
 cat >> .gbarrc <<EOF
-MODULES=python3,gcc/4.9.2,qt,cuda/7.5,cudnn/v5.0-prod
+MODULES=python3,gcc/6.2.0,qt,cuda/8.0,cudnn/v5.0-prod
 EOF
 cat >> .profile <<EOF
 # Setup local python3

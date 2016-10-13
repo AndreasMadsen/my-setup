@@ -28,8 +28,8 @@ module unload cuda
 module unload cudnn
 
 module load python3
-module load gcc/4.9.2
-module load cuda/7.5
+module load gcc/6.2.0
+module load cuda/8.0
 module load cudnn/v5.0-prod
 module load qt
 module load boost
@@ -39,7 +39,7 @@ export CC='gcc -w'
 export CXX='g++ -w'
 
 # Setup cuda path for theano
-export CUDA_PATH='/appl/cuda/7.5'
+export CUDA_PATH='/appl/cuda/8.0'
 export CUDNN_PATH='/appl/cudnn/v5.0-prod'
 
 # Expand path
@@ -54,6 +54,11 @@ pyvenv ~/stdpy3 --copies
 source ~/stdpy3/bin/activate
 
 #
+# Upgrade pip
+#
+pip3 install -U pip
+
+#
 # Install basic python math
 #
 pip3 install -U numpy
@@ -63,53 +68,8 @@ pip3 install -U scipy
 # Install matplotlib with Qt5 and basemap enabled
 #
 
-# Install sip (dependency for PyQt5)
-wgetretry http://sourceforge.net/projects/pyqt/files/sip/sip-4.17/sip-4.17.tar.gz
-tar -xf sip-4.17.tar.gz
-cd sip-4.17
-python3 configure.py
-make -j4
-make install
-cd $HOME
-rm -rf sip-4.17*
-
-# Install PyQt5 (optional backend for matplotlib)
-wgetretry http://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.5.1/PyQt-gpl-5.5.1.tar.gz
-tar -xf PyQt-gpl-5.5.1.tar.gz
-cd PyQt-gpl-5.5.1
-python3 configure.py --confirm-license
-# For some unknow reason the qt5 designer installs in the wrong path,
-# fortunately it isn't needed so just remove the install target
-patch -f designer/Makefile \
-<<EOF
---- designer/Makefile
-+++ designer/Makefile
-@@ -1694,7 +1694,7 @@
- 	-$(DEL_DIR) $(INSTALL_ROOT)/appl/qt/5.5.0/plugins/designer/
-
-
--install: install_target  FORCE
-+install: FORCE
-
- uninstall: uninstall_target  FORCE
-EOF
-patch -f qmlscene/Makefile \
-<<EOF
---- qmlscene/Makefile
-+++ qmlscene/Makefile
-@@ -829,7 +829,7 @@
- 	-$(DEL_DIR) $(INSTALL_ROOT)/appl/qt/5.5.0/plugins/PyQt5/
-
-
--install: install_target  FORCE
-+install: FORCE
-
- uninstall: uninstall_target  FORCE
-EOF
-make -j4
-make install
-cd $HOME
-rm -rf PyQt-gpl-5.5.1*
+# install sip and pyqt5
+pip3 install -U pyqt5
 
 # Install matplotlib
 pip3 install -U matplotlib
@@ -150,16 +110,16 @@ cd $HOME
 rm -rf ctags-5.8*
 
 # Install pyOpenCL
-wgetretry https://pypi.python.org/packages/source/p/pyopencl/pyopencl-2015.2.4.tar.gz
-tar -xf pyopencl-2015.2.4.tar.gz
-cd pyopencl-2015.2.4
+wgetretry https://pypi.io/packages/source/p/pyopencl/pyopencl-2016.2.tar.gz
+tar -xf pyopencl-2016.2.tar.gz
+cd pyopencl-2016.2
 python3 configure.py \
     --cl-inc-dir=$CUDA_PATH/include \
     --cl-lib-dir=$CUDA_PATH/lib \
     --cl-libname=OpenCL
 make -j4 install
 cd $HOME
-rm -rf pyopencl-2015.2.4*
+rm -rf pyopencl-2016.2*
 
 #
 # Install theano
@@ -169,10 +129,10 @@ rm -rf pyopencl-2015.2.4*
 pip3 install https://bitbucket.org/prologic/pydot/get/ac76697320d6.zip
 pip3 uninstall -y pyparsing
 pip3 install -U pyparsing==2.0.6
-patch -f stdpy3/lib/python3.4/site-packages/dot_parser.py \
+patch -f stdpy3/lib/python3.5/site-packages/dot_parser.py \
 <<EOF
---- a/stdpy3/lib/python3.4/site-packages/dot_parser.py
-+++ b/stdpy3/lib/python3.4/site-packages/dot_parser.py
+--- a/stdpy3/lib/python3.5/site-packages/dot_parser.py
++++ b/stdpy3/lib/python3.5/site-packages/dot_parser.py
 @@ -25,8 +25,9 @@
  from pyparsing import ( nestedExpr, Literal, CaselessLiteral, Word, Upcase, OneOrMore, ZeroOrMore,
      Forward, NotAny, delimitedList, oneOf, Group, Optional, Combine, alphas, nums,
@@ -200,63 +160,7 @@ rm -rf cmake-3.5.1*
 # since it is just the test files. Just remove the test.
 git clone https://github.com/Theano/libgpuarray.git
 cd libgpuarray
-git checkout 99a51ba43bb05eb2c6f848439867dce0f05fca5f
-patch -f tests/check_array.c \
-<<EOF
---- check_array.c
-+++ check_array.c
-@@ -57,7 +57,6 @@
-   if (dev == -1)
-     ck_abort_msg("Bad test device");
-   ctx = ops->buffer_init(dev, 0, NULL);
--  ck_assert_ptr_ne(ctx, NULL);
- }
-
- void teardown(void) {
-EOF
-patch -f tests/check_util.c \
-<<EOF
---- check_util.c
-+++ check_util.c
-@@ -60,8 +60,6 @@
-   strs[1][2] = 4;
-
-   gpuarray_elemwise_collapse(2, &nd, dims, strs);
--  ck_assert_uint_eq(nd, 1);
--  ck_assert_uint_eq(dims[0], 1000);
-   ck_assert_int_eq(strs[0][0], 4);
-   ck_assert_int_eq(strs[1][0], 4);
-
-@@ -77,9 +75,6 @@
-   strs[1][2] = 4;
-
-   gpuarray_elemwise_collapse(2, &nd, dims, strs);
--  ck_assert_uint_eq(nd, 2);
--  ck_assert_uint_eq(dims[0], 50);
--  ck_assert_uint_eq(dims[1], 20);
-   ck_assert_int_eq(strs[0][0], 168);
-   ck_assert_int_eq(strs[0][1], 4);
-   ck_assert_int_eq(strs[1][0], 80);
-@@ -97,9 +92,6 @@
-   strs[1][2] = 80;
-
-   gpuarray_elemwise_collapse(2, &nd, dims, strs);
--  ck_assert_uint_eq(nd, 2);
--  ck_assert_uint_eq(dims[0], 20);
--  ck_assert_uint_eq(dims[1], 50);
-   ck_assert_int_eq(strs[0][0], 4);
-   ck_assert_int_eq(strs[0][1], 168);
-   ck_assert_int_eq(strs[1][0], 4);
-@@ -112,8 +104,6 @@
-   strs[0][1] = 4;
-
-   gpuarray_elemwise_collapse(1, &nd, dims, strs);
--  ck_assert_uint_eq(nd, 1);
--  ck_assert_uint_eq(dims[0], 1);
-   ck_assert_int_eq(strs[0][0], 4);
- }
- END_TEST
-EOF
+git checkout 5f074850581fd06f72e39659781a0e3405c49187
 mkdir Build && cd Build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/
 make -j4
@@ -287,37 +191,6 @@ EOF
 
 # Install lasagne (development version)
 pip3 install git+https://github.com/Lasagne/Lasagne.git
-
-#
-# Install h5py and netCDF4-python
-#
-
-# Install HDF5 (netCDF4 dependency)
-wgetretry http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.16.tar.gz
-tar -xf hdf5-1.8.16.tar.gz
-cd hdf5-1.8.16
-./configure --prefix=$HOME --enable-shared --enable-hl
-make -j4
-make install
-cd $HOME
-rm -rf hdf5-1.8.16*
-
-# Install h5py
-pip3 install Cython
-pip3 install h5py
-
-# Install netCDF4 (netCDF4-python dependency)
-wgetretry ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.1.tar.gz
-tar -xf netcdf-4.3.3.1.tar.gz
-cd netcdf-4.3.3.1
-./configure --enable-netcdf-4 --enable-dap --enable-shared --prefix=$HOME
-make -j4
-make install
-cd $HOME
-rm -rf netcdf-4.3.3.1*
-
-# Install netCDF4-python
-pip3 install netcdf4
 
 # DONE
 cat <<EOF
