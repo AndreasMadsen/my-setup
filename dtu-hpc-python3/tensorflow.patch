@@ -1,0 +1,55 @@
+From 9f53fa2968dacfac398239987adbfc4ddf2305e9 Mon Sep 17 00:00:00 2001
+From: Andreas Madsen <amwebdk@gmai.com>
+Date: Fri, 21 Oct 2016 14:34:48 +0200
+Subject: [PATCH] hpc hack
+
+---
+ tensorflow/python/BUILD                                           | 1 -
+ .../crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl   | 8 ++++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/tensorflow/python/BUILD b/tensorflow/python/BUILD
+index e3313b4..7a2e297 100644
+--- a/tensorflow/python/BUILD
++++ b/tensorflow/python/BUILD
+@@ -1930,7 +1930,6 @@ py_library(
+ # Just used by tests.
+ tf_cuda_library(
+     name = "construction_fails_op",
+-    testonly = 1,
+     srcs = ["client/test_construction_fails_op.cc"],
+     deps = [
+         "//tensorflow/core",
+diff --git a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+index d3bb93c..aad2a1a 100755
+--- a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
++++ b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+@@ -48,11 +48,15 @@ import pipes
+ # Template values set by cuda_autoconf.
+ CPU_COMPILER = ('%{cpu_compiler}')
+ GCC_HOST_COMPILER_PATH = ('%{gcc_host_compiler_path}')
++BINTOOLS_PATH = ('/appl/binutils/2.25.1/bin')
+ 
+ CURRENT_DIR = os.path.dirname(sys.argv[0])
+ NVCC_PATH = CURRENT_DIR + '/../../../cuda/bin/nvcc'
+ LLVM_HOST_COMPILER_PATH = ('/usr/bin/gcc')
+-PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH)
++PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH) + ':' + os.path.dirname(BINTOOLS_PATH)
++
++if 'PATH' in os.environ:
++  PREFIX_DIR = os.environ['PATH']
+ 
+ def Log(s):
+   print('gpus/crosstool: {0}'.format(s))
+@@ -244,7 +248,7 @@ def main():
+   cpu_compiler_flags = [flag for flag in sys.argv[1:]
+                              if not flag.startswith(('--cuda_log'))]
+ 
+-  return subprocess.call([CPU_COMPILER] + cpu_compiler_flags)
++  return subprocess.call([CPU_COMPILER] + cpu_compiler_flags, env=os.environ)
+ 
+ if __name__ == '__main__':
+   sys.exit(main())
+-- 
+2.7.4
+
