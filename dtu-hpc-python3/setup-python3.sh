@@ -84,6 +84,11 @@ EOM
 fi
 
 #
+# Start time
+#
+start_time=`date +%s`
+
+#
 # Setup virtual env
 #
 export PYTHONPATH=
@@ -277,7 +282,7 @@ export CUDNN_INSTALL_PATH=$CUDNN_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES="3.5,5.2"
 
 # configure tensorflow
-yes "" | CC=gcc CXX=g++ ./configure
+yes "" 2>/dev/null | CC=gcc CXX=g++ ./configure
 
 # build tensorflow
 # use --verbose_failures -s for more verboseness
@@ -300,6 +305,12 @@ cd $HOME
 rm -rf tensorflow tensorflow_pkg tensorflow.patch
 
 # DONE
+end_time=`date +%s`
+run_time=$((end_time-start_time))
+
+printf '\nInstall script finished. Took: %dh:%dm:%ds\n' \
+  $(($run_time/3600)) $(($run_time%3600/60)) $(($run_time%60))
+
 cat <<EOF
 ####################################
 ##                                ##
