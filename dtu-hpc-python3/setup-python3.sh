@@ -22,33 +22,75 @@ function wgetretry {
     wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1 || wget $1
 }
 
-# Load already installed software
+# Unload already installed software
 module unload gcc
 module unload cuda
 module unload cudnn
-
-module load python3
-module load gcc/6.2.0
-module load cuda/8.0
-module load cudnn/v5.0-prod
-module load qt
-module load boost
 
 # Setup to use gnu compiler and hide warnings
 export CC='gcc -w'
 export CXX='g++ -w'
 
 # Setup cuda path for theano
-export CUDA_PATH='/appl/cuda/8.0'
-export CUDNN_PATH='/appl/cudnn/v5.0-prod'
+export CUDA_VERSION='8.0'
+export CUDNN_VERSION='5.1'
+export CUDA_PATH="/appl/cuda/${CUDA_VERSION}"
+export CUDNN_PATH="/appl/cudnn/v${CUDNN_VERSION}-prod"
+
+# load modules
+module load python3
+module load gcc/4.9.2
+module load cuda/$CUDA_VERSION
+module load cudnn/v$CUDNN_VERSION-prod
+module load qt
+module load boost
 
 # Expand path
 export PATH="$HOME/bin:$PATH"
+export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
 
 # Use HOME directory as base
 cd $HOME
 
+#
+# Find bazel workdir
+#
+export WORKDIR=""
+
+if [ -d "/SCRATCH/$USER" ]; then
+  export WORKDIR="/SCRATCH/$USER"
+fi
+
+if [ -d "/work2/$USER" ]; then
+  export WORKDIR="/work2/$USER"
+fi
+
+if [ -d "/work1/$USER" ]; then
+  export WORKDIR="/work1/$USER"
+fi
+
+if [ -z "$WORKDIR" ]; then
+  error_message=`cat <<EOM
+**COULD NOT INSTALL TENSORFLOW**
+A $USER directory could not be found in /SCRATCH, /work2 or /work1
+most likely you have not registred for a SCRATCH directory. This is
+necessary because bazel (used by tensorflow) doesn\'t work on NFS
+(filesystem).
+EOM
+`
+
+  echo "$error_message"
+  exit 1
+fi
+
+#
+# Start time
+#
+start_time=`date +%s`
+
+#
 # Setup virtual env
+#
 export PYTHONPATH=
 pyvenv ~/stdpy3 --copies
 source ~/stdpy3/bin/activate
@@ -192,7 +234,83 @@ EOF
 # Install lasagne (development version)
 pip3 install git+https://github.com/Lasagne/Lasagne.git
 
+#
+# Install TensorFlow
+#
+
+# install bazel (tensorflow dependency)
+wgetretry https://github.com/bazelbuild/bazel/archive/0.3.2.tar.gz
+mv 0.3.2.tar.gz bazel-0.3.2.tar.gz
+tar -xf bazel-0.3.2.tar.gz
+cd bazel-0.3.2
+CC=gcc CXX=g++ ./compile.sh
+cp -f ./output/bazel $HOME/bin/bazel
+cd $HOME
+rm -rf bazel-0.3.2*
+
+# configure bazel
+cat > $HOME/.bazelrc <<EOF
+# --batch: always run in batch mode, since there are some firewall issues.
+# --output_user_root: HOME is NFS (filesystem), this will not work with bazel.
+startup --batch --output_user_root=$WORKDIR/.bazel
+EOF
+
+# install wheel (used for building tensorflow pip package)
+pip3 install -U wheel
+
+# install tensorflow
+git clone https://github.com/tensorflow/tensorflow
+cd tensorflow
+git checkout 5a5a25ea3ebef623e07fb9a46419a9df377a37a5
+
+# apply patch for "could not find as" and "could not find swig"
+curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
+
+# fix an issue with ldconfig not being in the $PATH
+ln -fs /sbin/ldconfig $HOME/bin/ldconfig
+
+# set configuration parameters
+export PYTHON_BIN_PATH=`which python3`
+export TF_NEED_GCP=0
+export TF_NEED_HDFS=0
+export TF_NEED_CUDA=1
+export GCC_HOST_COMPILER_PATH=`which gcc` # $HOME/gcc
+export TF_CUDA_VERSION=$CUDA_VERSION
+export CUDA_TOOLKIT_PATH=$CUDA_PATH
+export TF_CUDNN_VERSION=`echo $CUDNN_VERSION | head -c 1`
+export CUDNN_INSTALL_PATH=$CUDNN_PATH
+export TF_CUDA_COMPUTE_CAPABILITIES="3.5,5.2"
+
+# configure tensorflow
+yes "" 2>/dev/null | CC=gcc CXX=g++ ./configure
+
+# build tensorflow
+# use --verbose_failures -s for more verboseness
+CC=gcc CXX=g++ bazel build --copt="-w" \
+--ignore_unsupported_sandboxing --spawn_strategy=standalone \
+-c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
+
+# build pip package
+./bazel-bin/tensorflow/tools/pip_package/build_pip_package $HOME/tensorflow_pkg
+
+# install tensorflow
+# note that the same will change depending on the version
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.11.0rc0-py3-none-any.whl
+
+# cleanup bazel build files
+bazel clean --expunge
+
+# cleanup tensorflow
+cd $HOME
+rm -rf tensorflow tensorflow_pkg tensorflow.patch
+
 # DONE
+end_time=`date +%s`
+run_time=$((end_time-start_time))
+
+printf '\nInstall script finished. Took: %dh:%dm:%ds\n' \
+  $(($run_time/3600)) $(($run_time%3600/60)) $(($run_time%60))
+
 cat <<EOF
 ####################################
 ##                                ##

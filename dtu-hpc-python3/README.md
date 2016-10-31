@@ -10,6 +10,28 @@ Install python and friends on DTUs shared user system. Included is:
 * PyOpenCL (with mako)
 * Theano (with pydot, libgpuarray, cuda 8.0 and cuDNN 5)
 
+### Request workspace
+
+Your homedrive uses NFS (file system) which is bazel compatible (compile tool
+used by tensorflow). To fix this you need to request a `/SCRATCH` directory.
+This is a secondary user directory that lives in either `/SCRATCH`, `/work1` or
+`/work2` and it uses a diffrent file system.
+
+You can send a mail like this:
+
+```
+TO: support@cc.dtu.dk
+FROM: <userid>@dtu.dk
+
+Hi DTU HPC
+
+I would like to request a `/SCRATCH` directory which is necessary for compiling
+tensorflow. During compilation this will use approximatly 2 GB.
+
+Thanks.
+<name> <userid>
+```
+
 ### Run setup script
 
 Type or copy this after connecting with SSH:
@@ -22,6 +44,12 @@ less +F -r setup-python3.log
 rm -f setup-python3.*
 ```
 
+### Known issues
+
+Tensorflow should work with multiple GPUs but currently doesn't on the HPC
+system. To use just one GPU set e.g. `CUDA_VISIBLE_DEVICES=3`. To get a
+list of all available GPUs use `nvidia-smi`.
+
 ### After install and future login
 
 For any future login and after the installation run one of these:
@@ -33,7 +61,7 @@ k40sh
 module load python3
 module load gcc/4.9.2
 module load cuda/8.0
-module load cudnn/v5.0-prod
+module load cudnn/v5.1-prod
 module load qt
 export PYTHONPATH=
 source ~/stdpy3/bin/activate
@@ -54,7 +82,7 @@ You can make this happen automatically for all shell-login, just run:
 
 ```shell
 cat >> .gbarrc <<EOF
-MODULES=python3,gcc/6.2.0,qt,cuda/8.0,cudnn/v5.0-prod
+MODULES=python3,gcc/4.9.2,qt,cuda/8.0,cudnn/v5.1-prod
 EOF
 cat >> .profile <<EOF
 # Setup local python3
