@@ -261,7 +261,7 @@ pip3 install -U wheel
 # install tensorflow
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
-git checkout 5a5a25ea3ebef623e07fb9a46419a9df377a37a5
+git checkout 6f7cf60a4158a6d7861dc1b41a6446b575153a2e
 
 # apply patch for "could not find as" and "could not find swig"
 curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
@@ -295,7 +295,7 @@ CC=gcc CXX=g++ bazel build --copt="-w" \
 
 # install tensorflow
 # note that the same will change depending on the version
-pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.11.0rc0-py3-none-any.whl
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.11.0rc1-py3-none-any.whl
 
 # cleanup bazel build files
 bazel clean --expunge
