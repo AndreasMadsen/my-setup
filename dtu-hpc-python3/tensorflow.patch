@@ -1,12 +1,26 @@
-From c1987eef05157386edd03ac471307670cfc87793 Mon Sep 17 00:00:00 2001
+From 59a867cf98765830733acb6227749ef1fd5adaaf Mon Sep 17 00:00:00 2001
 From: Andreas Madsen <amwebdk@gmai.com>
-Date: Tue, 1 Nov 2016 14:12:51 +0100
+Date: Wed, 2 Nov 2016 22:45:16 +0100
 Subject: [PATCH] hpc hack
 
 ---
+ tensorflow/core/platform/default/logging.cc                        | 2 ++
  .../crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl    | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
+diff --git a/tensorflow/core/platform/default/logging.cc b/tensorflow/core/platform/default/logging.cc
+index e7808ca..55a6464 100644
+--- a/tensorflow/core/platform/default/logging.cc
++++ b/tensorflow/core/platform/default/logging.cc
+@@ -74,6 +74,8 @@ void LogMessage::GenerateLogMessage() {
+ #else
+
+ void LogMessage::GenerateLogMessage() {
++  if (severity_ <= INFO) return;
++
+   // TODO(jeff,sanjay): For open source version, replace this with something
+   // that logs through the env or something and fill in appropriate time info.
+   fprintf(stderr, "%c %s:%d] %s\n", "IWEF"[severity_], fname_, line_,
 diff --git a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
 index d3bb93c..d213f2c 100755
 --- a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
