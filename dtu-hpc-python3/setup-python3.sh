@@ -53,37 +53,6 @@ export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
 cd $HOME
 
 #
-# Find bazel workdir
-#
-export WORKDIR=""
-
-if [ -d "/SCRATCH/$USER" ]; then
-  export WORKDIR="/SCRATCH/$USER"
-fi
-
-if [ -d "/work2/$USER" ]; then
-  export WORKDIR="/work2/$USER"
-fi
-
-if [ -d "/work1/$USER" ]; then
-  export WORKDIR="/work1/$USER"
-fi
-
-if [ -z "$WORKDIR" ]; then
-  error_message=`cat <<EOM
-**COULD NOT INSTALL TENSORFLOW**
-A $USER directory could not be found in /SCRATCH, /work2 or /work1
-most likely you have not registred for a SCRATCH directory. This is
-necessary because bazel (used by tensorflow) doesn\'t work on NFS
-(filesystem).
-EOM
-`
-
-  echo "$error_message"
-  exit 1
-fi
-
-#
 # Start time
 #
 start_time=`date +%s`
@@ -252,8 +221,11 @@ rm -rf bazel-0.3.2*
 cat > $HOME/.bazelrc <<EOF
 # --batch: always run in batch mode, since there are some firewall issues.
 # --output_user_root: HOME is NFS (filesystem), this will not work with bazel.
-startup --batch --output_user_root=$WORKDIR/.bazel
+startup --batch --output_user_root=/tmp/$USER/.bazel
 EOF
+
+# create bazed output root directory
+mkdir -p /tmp/$USER
 
 # install wheel (used for building tensorflow pip package)
 pip3 install -U wheel
