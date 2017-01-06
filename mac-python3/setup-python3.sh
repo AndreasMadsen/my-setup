@@ -21,23 +21,21 @@ brew install cmake
 # Install Python 3 with openssl
 #
 brew install openssl
-brew link openssl --overwrite
-brew install python3 --with-brewed-openssl
+brew install python3
 brew linkapps python3
-pip3 install --upgrade pip
+pip3 install --upgrade pip setuptools wheel
 
 #
 # Install math tools
 #
 brew install homebrew/python/numpy --with-python3 --without-python
-brew link --overwrite numpy
 brew install homebrew/python/scipy --with-python3 --without-python --default-fortran-flags
 
 #
-# Install matplotlib (with Qt4, cario and basemap)
+# Install matplotlib (with Qt5, cario and basemap)
 #
 brew install pyqt5 --with-python3 --without-python
-brew install homebrew/python/matplotlib --with-python3 --without-python --with-cario
+brew install homebrew/python/matplotlib --with-python3 --without-python --with-cairo --with-pyqt5
 brew install homebrew/python/matplotlib-basemap --with-python3 --without-python
 
 #
@@ -56,11 +54,10 @@ pip3 instal pydot
 # Install clBLAS
 git clone https://github.com/clMathLibraries/clBLAS.git
 cd clBLAS
+git checkout develop
 mkdir build && cd build
 cmake ../src -DCMAKE_BUILD_TYPE=Release
 make && make install
-cp -r package/* /usr/local/
-cp -r package/lib64/* /usr/local/lib/
 cd ../..
 rm -rf clBLAS
 
