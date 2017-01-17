@@ -49,6 +49,12 @@ module load boost
 export PATH="$HOME/bin:$PATH"
 export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
 
+# NOTE: Not sure if this should be added
+# See: https://www.tensorflow.org/get_started/os_setup#optional_linux_enable_gpu_support
+# export CUDA_HOME="/appl/cuda/${CUDA_VERSION}"
+# export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/appl/cuda/${CUDA_VERSION}/lib64"
+# export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/appl/cuda/${CUDA_VERSION}/extras/CUPTI/lib64"
+
 # Use HOME directory as base
 cd $HOME
 
@@ -208,14 +214,14 @@ pip3 install git+https://github.com/Lasagne/Lasagne.git
 #
 
 # install bazel (tensorflow dependency)
-wgetretry https://github.com/bazelbuild/bazel/archive/0.3.2.tar.gz
-mv 0.3.2.tar.gz bazel-0.3.2.tar.gz
-tar -xf bazel-0.3.2.tar.gz
-cd bazel-0.3.2
+wgetretry https://github.com/bazelbuild/bazel/releases/download/0.4.3/bazel-0.4.3-dist.zip
+unzip bazel-0.4.3-dist.zip -d bazel-0.4.3-dist
+cd bazel-0.4.3-dist
 CC=gcc CXX=g++ ./compile.sh
+mkdir -p $HOME/bin
 cp -f ./output/bazel $HOME/bin/bazel
 cd $HOME
-rm -rf bazel-0.3.2*
+rm -rf bazel-0.4.3*
 
 # configure bazel
 cat > $HOME/.bazelrc <<EOF
@@ -233,10 +239,15 @@ pip3 install -U wheel
 # install tensorflow
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
-git checkout 6f7cf60a4158a6d7861dc1b41a6446b575153a2e
+git checkout tags/0.12.1
+
 
 # apply patch for "could not find as" and "could not find swig"
-curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
+# TODO: Change url if fork is merged
+curl -L https://raw.githubusercontent.com/LasseRegin/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
+
+# Fix dead link in `workspace.bzl`
+git cherry-pick 1e317b1f7dc5ccf04fc51ac96d97f5bdaefa9af9
 
 # fix an issue with ldconfig not being in the $PATH
 ln -fs /sbin/ldconfig $HOME/bin/ldconfig
@@ -246,6 +257,9 @@ export PYTHON_BIN_PATH=`which python3`
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
 export TF_NEED_CUDA=1
+export TF_NEED_JEMALLOC=0
+export TF_ENABLE_XLA=0
+export TF_NEED_OPENCL=0
 export GCC_HOST_COMPILER_PATH=`which gcc` # $HOME/gcc
 export TF_CUDA_VERSION=$CUDA_VERSION
 export CUDA_TOOLKIT_PATH=$CUDA_PATH
@@ -267,7 +281,7 @@ CC=gcc CXX=g++ bazel build --copt="-w" \
 
 # install tensorflow
 # note that the same will change depending on the version
-pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.11.0rc1-py3-none-any.whl
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.12.1-cp35-cp35m-linux_x86_64.whl
 
 # cleanup bazel build files
 bazel clean --expunge
