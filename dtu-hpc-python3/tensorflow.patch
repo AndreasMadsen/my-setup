@@ -31,10 +31,7 @@ index 06e16cd..5484138 100644
    native.new_http_archive(
      name = "zlib_archive",
 -    url = "http://zlib.net/zlib-1.2.8.tar.gz",
-+    urls = [
-+      "http://bazel-mirror.storage.googleapis.com/zlib.net/zlib-1.2.8.tar.gz",
-+      "http://zlib.net/fossils/zlib-1.2.8.tar.gz",
-+    ],
++    url = "http://zlib.net/fossils/zlib-1.2.8.tar.gz",
      sha256 = "36658cb768a54c1d4dec43c3116c27ed893e88b02ecfcb44f2166f9c0b7f2a0d",
      strip_prefix = "zlib-1.2.8",
      build_file = str(Label("//:zlib.BUILD")),
