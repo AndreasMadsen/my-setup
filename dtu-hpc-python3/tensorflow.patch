@@ -1,13 +1,12 @@
-From 6d7d61c04414af3570cda4357f52a1acec305a07 Mon Sep 17 00:00:00 2001
+From c5fad8aa8488eeacc49b42dc3527365f8d67882e Mon Sep 17 00:00:00 2001
 From: Lasse Regin Nielsen <lasseregin@gmail.com>
-Date: Tue, 17 Jan 2017 14:12:52 +0100
-Subject: [PATCH] [Fix] tf-0.12.1 patch.
+Date: Tue, 17 Jan 2017 21:24:19 +0100
+Subject: [PATCH] [Fix] Patch for 0.12.1
 
 ---
- tensorflow/core/platform/default/logging.cc                        | 2 ++
- tensorflow/workspace.bzl                                           | 5 ++++-
- .../crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl    | 7 +++++--
- 3 files changed, 11 insertions(+), 3 deletions(-)
+ tensorflow/core/platform/default/logging.cc                       | 2 ++
+ .../crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl   | 8 ++++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/tensorflow/core/platform/default/logging.cc b/tensorflow/core/platform/default/logging.cc
 index 1d03725..79df349 100644
@@ -22,24 +21,11 @@ index 1d03725..79df349 100644
    // TODO(jeff,sanjay): For open source version, replace this with something
    // that logs through the env or something and fill in appropriate time info.
    fprintf(stderr, "%c %s:%d] %s\n", "IWEF"[severity_], fname_, line_,
-diff --git a/tensorflow/workspace.bzl b/tensorflow/workspace.bzl
-index 06e16cd..5484138 100644
---- a/tensorflow/workspace.bzl
-+++ b/tensorflow/workspace.bzl
-@@ -228,7 +228,10 @@ def tf_workspace(path_prefix = "", tf_repo_name = ""):
-
-   native.new_http_archive(
-     name = "zlib_archive",
--    url = "http://zlib.net/zlib-1.2.8.tar.gz",
-+    url = "http://zlib.net/fossils/zlib-1.2.8.tar.gz",
-     sha256 = "36658cb768a54c1d4dec43c3116c27ed893e88b02ecfcb44f2166f9c0b7f2a0d",
-     strip_prefix = "zlib-1.2.8",
-     build_file = str(Label("//:zlib.BUILD")),
 diff --git a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
-index d3bb93c..34922db 100755
+index d3bb93c..7dca2fd 100755
 --- a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
 +++ b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
-@@ -48,11 +48,14 @@ import pipes
+@@ -48,11 +48,15 @@ import pipes
  # Template values set by cuda_autoconf.
  CPU_COMPILER = ('%{cpu_compiler}')
  GCC_HOST_COMPILER_PATH = ('%{gcc_host_compiler_path}')
@@ -52,10 +38,11 @@ index d3bb93c..34922db 100755
 +PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH) + ':' + os.path.dirname(BINTOOLS_PATH)
 +if 'PATH' in os.environ:
 +  PREFIX_DIR = os.environ['PATH']
++
 
  def Log(s):
    print('gpus/crosstool: {0}'.format(s))
-@@ -244,7 +247,7 @@ def main():
+@@ -244,7 +248,7 @@ def main():
    cpu_compiler_flags = [flag for flag in sys.argv[1:]
                               if not flag.startswith(('--cuda_log'))]
 

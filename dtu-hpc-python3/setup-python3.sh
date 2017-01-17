@@ -241,9 +241,13 @@ git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
 git checkout tags/0.12.1
 
+
 # apply patch for "could not find as" and "could not find swig"
 # TODO: Change url if fork is merged
 curl -L https://raw.githubusercontent.com/LasseRegin/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
+
+# Fix dead link in `workspace.bzl`
+git cherry-pick 1e317b1f7dc5ccf04fc51ac96d97f5bdaefa9af9
 
 # fix an issue with ldconfig not being in the $PATH
 ln -fs /sbin/ldconfig $HOME/bin/ldconfig
