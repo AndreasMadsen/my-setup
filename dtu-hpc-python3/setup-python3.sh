@@ -47,10 +47,13 @@ module load boost
 
 # Expand path
 export PATH="$HOME/bin:$PATH"
-export CUDA_HOME="/appl/cuda/${CUDA_VERSION}"
 export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/appl/cuda/${CUDA_VERSION}/lib64"
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/appl/cuda/${CUDA_VERSION}/extras/CUPTI/lib64"
+
+# NOTE: Not sure if this should be added
+# See: https://www.tensorflow.org/get_started/os_setup#optional_linux_enable_gpu_support
+# export CUDA_HOME="/appl/cuda/${CUDA_VERSION}"
+# export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/appl/cuda/${CUDA_VERSION}/lib64"
+# export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/appl/cuda/${CUDA_VERSION}/extras/CUPTI/lib64"
 
 # Use HOME directory as base
 cd $HOME
@@ -78,34 +81,34 @@ pip3 install -U pip
 pip3 install -U numpy
 pip3 install -U scipy
 
-# #
-# # Install matplotlib with Qt5 and basemap enabled
-# #
 #
-# # install sip and pyqt5
-# pip3 install -U pyqt5
+# Install matplotlib with Qt5 and basemap enabled
 #
-# # Install matplotlib
-# pip3 install -U matplotlib
+
+# install sip and pyqt5
+pip3 install -U pyqt5
+
+# Install matplotlib
+pip3 install -U matplotlib
+
+# Install basemap (matplotlib extension)
+wgetretry http://downloads.sourceforge.net/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz
+tar -xf basemap-1.0.7.tar.gz
+cd basemap-1.0.7
+cd geos-3.3.3
+./configure --prefix=$HOME
+make -j4
+make install
+cd ..
+python3 setup.py install
+cd $HOME
+rm -rf basemap-1.0.7*
+
 #
-# # Install basemap (matplotlib extension)
-# wgetretry http://downloads.sourceforge.net/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz
-# tar -xf basemap-1.0.7.tar.gz
-# cd basemap-1.0.7
-# cd geos-3.3.3
-# ./configure --prefix=$HOME
-# make -j4
-# make install
-# cd ..
-# python3 setup.py install
-# cd $HOME
-# rm -rf basemap-1.0.7*
+# Install data science
 #
-# #
-# # Install data science
-# #
-# pip3 install -U scikit-learn
-# pip3 install -U pandas
+pip3 install -U scikit-learn
+pip3 install -U pandas
 
 #
 # Install pyOpenCL
@@ -135,76 +138,76 @@ make -j4 install
 cd $HOME
 rm -rf pyopencl-2016.2*
 
-# #
-# # Install theano
-# #
 #
-# # Instal pydot (optional theano dependencies)
-# pip3 install https://bitbucket.org/prologic/pydot/get/ac76697320d6.zip
-# pip3 uninstall -y pyparsing
-# pip3 install -U pyparsing==2.0.6
-# patch -f stdpy3/lib/python3.5/site-packages/dot_parser.py \
-# <<EOF
-# --- a/stdpy3/lib/python3.5/site-packages/dot_parser.py
-# +++ b/stdpy3/lib/python3.5/site-packages/dot_parser.py
-# @@ -25,8 +25,9 @@
-#  from pyparsing import ( nestedExpr, Literal, CaselessLiteral, Word, Upcase, OneOrMore, ZeroOrMore,
-#      Forward, NotAny, delimitedList, oneOf, Group, Optional, Combine, alphas, nums,
-#      restOfLine, cStyleComment, nums, alphanums, printables, empty, quotedString,
-# -    ParseException, ParseResults, CharsNotIn, _noncomma, dblQuotedString, QuotedString, ParserElement )
-# +    ParseException, ParseResults, CharsNotIn, dblQuotedString, QuotedString, ParserElement )
+# Install theano
 #
-# +_noncomma = "".join([c for c in printables if c != ","])
-#
-#  class P_AttrList:
-# EOF
-#
-# # Upgrade cmake (libgpuarray dependency)
-# wgetretry https://cmake.org/files/v3.5/cmake-3.5.1.tar.gz
-# tar -xf cmake-3.5.1.tar.gz
-# cd cmake-3.5.1
-# ./bootstrap --prefix=$HOME
-# make -j4
-# make install
-# cd $HOME
-# rm -rf cmake-3.5.1*
-#
-# # Install libgpuarray (optional theano dependency)
-# # Note the HPC version of check.h is old, so ck_assert_ptr_ne is not defined
-# # since it is just the test files. Just remove the test.
-# git clone https://github.com/Theano/libgpuarray.git
-# cd libgpuarray
-# git checkout 5f074850581fd06f72e39659781a0e3405c49187
-# mkdir Build && cd Build
-# cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/
-# make -j4
-# make install
-# cd $HOME
-# rm -rf libgpuarray
-#
-# # Install theano (development version)
-# pip3 install git+https://github.com/Theano/Theano.git
-#
-# # Configure theano
-# cat > .theanorc <<EOF
-# [global]
-# device = gpu
-# floatX = float32
-#
-# [cuda]
-# root = $CUDA_PATH
-#
-# [lib]
-# cnmem = 1
-#
-# [dnn]
-# enabled = True
-# include_path = $CUDNN_PATH/include
-# library_path = $CUDNN_PATH/lib64
-# EOF
-#
-# # Install lasagne (development version)
-# pip3 install git+https://github.com/Lasagne/Lasagne.git
+
+# Instal pydot (optional theano dependencies)
+pip3 install https://bitbucket.org/prologic/pydot/get/ac76697320d6.zip
+pip3 uninstall -y pyparsing
+pip3 install -U pyparsing==2.0.6
+patch -f stdpy3/lib/python3.5/site-packages/dot_parser.py \
+<<EOF
+--- a/stdpy3/lib/python3.5/site-packages/dot_parser.py
++++ b/stdpy3/lib/python3.5/site-packages/dot_parser.py
+@@ -25,8 +25,9 @@
+ from pyparsing import ( nestedExpr, Literal, CaselessLiteral, Word, Upcase, OneOrMore, ZeroOrMore,
+     Forward, NotAny, delimitedList, oneOf, Group, Optional, Combine, alphas, nums,
+     restOfLine, cStyleComment, nums, alphanums, printables, empty, quotedString,
+-    ParseException, ParseResults, CharsNotIn, _noncomma, dblQuotedString, QuotedString, ParserElement )
++    ParseException, ParseResults, CharsNotIn, dblQuotedString, QuotedString, ParserElement )
+
++_noncomma = "".join([c for c in printables if c != ","])
+
+ class P_AttrList:
+EOF
+
+# Upgrade cmake (libgpuarray dependency)
+wgetretry https://cmake.org/files/v3.5/cmake-3.5.1.tar.gz
+tar -xf cmake-3.5.1.tar.gz
+cd cmake-3.5.1
+./bootstrap --prefix=$HOME
+make -j4
+make install
+cd $HOME
+rm -rf cmake-3.5.1*
+
+# Install libgpuarray (optional theano dependency)
+# Note the HPC version of check.h is old, so ck_assert_ptr_ne is not defined
+# since it is just the test files. Just remove the test.
+git clone https://github.com/Theano/libgpuarray.git
+cd libgpuarray
+git checkout 5f074850581fd06f72e39659781a0e3405c49187
+mkdir Build && cd Build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/
+make -j4
+make install
+cd $HOME
+rm -rf libgpuarray
+
+# Install theano (development version)
+pip3 install git+https://github.com/Theano/Theano.git
+
+# Configure theano
+cat > .theanorc <<EOF
+[global]
+device = gpu
+floatX = float32
+
+[cuda]
+root = $CUDA_PATH
+
+[lib]
+cnmem = 1
+
+[dnn]
+enabled = True
+include_path = $CUDNN_PATH/include
+library_path = $CUDNN_PATH/lib64
+EOF
+
+# Install lasagne (development version)
+pip3 install git+https://github.com/Lasagne/Lasagne.git
 
 #
 # Install TensorFlow
