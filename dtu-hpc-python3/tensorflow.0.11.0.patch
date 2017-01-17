@@ -1,0 +1,71 @@
+From cc11644448b5a05c9227756f9fe4b153428012df Mon Sep 17 00:00:00 2001
+From: Lasse Regin Nielsen <lasseregin@gmail.com>
+Date: Tue, 17 Jan 2017 18:33:30 +0100
+Subject: [PATCH] [Fix] Patch fixes.
+
+---
+ tensorflow/core/platform/default/logging.cc                        | 2 ++
+ tensorflow/workspace.bzl                                           | 5 ++++-
+ .../crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl    | 7 +++++--
+ 3 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/tensorflow/core/platform/default/logging.cc b/tensorflow/core/platform/default/logging.cc
+index e7808ca..55a6464 100644
+--- a/tensorflow/core/platform/default/logging.cc
++++ b/tensorflow/core/platform/default/logging.cc
+@@ -74,6 +74,8 @@ void LogMessage::GenerateLogMessage() {
+ #else
+
+ void LogMessage::GenerateLogMessage() {
++  if (severity_ <= INFO) return;
++
+   // TODO(jeff,sanjay): For open source version, replace this with something
+   // that logs through the env or something and fill in appropriate time info.
+   fprintf(stderr, "%c %s:%d] %s\n", "IWEF"[severity_], fname_, line_,
+diff --git a/tensorflow/workspace.bzl b/tensorflow/workspace.bzl
+index 4be2490..0481983 100644
+--- a/tensorflow/workspace.bzl
++++ b/tensorflow/workspace.bzl
+@@ -217,7 +217,10 @@ def tf_workspace(path_prefix = "", tf_repo_name = ""):
+
+   native.new_http_archive(
+     name = "zlib_archive",
+-    url = "http://zlib.net/zlib-1.2.8.tar.gz",
++    urls = [
++      "http://bazel-mirror.storage.googleapis.com/zlib.net/zlib-1.2.8.tar.gz",
++      "http://zlib.net/fossils/zlib-1.2.8.tar.gz",
++    ],
+     sha256 = "36658cb768a54c1d4dec43c3116c27ed893e88b02ecfcb44f2166f9c0b7f2a0d",
+     strip_prefix = "zlib-1.2.8",
+     build_file = str(Label("//:zlib.BUILD")),
+diff --git a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+index d3bb93c..34922db 100755
+--- a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
++++ b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+@@ -48,11 +48,14 @@ import pipes
+ # Template values set by cuda_autoconf.
+ CPU_COMPILER = ('%{cpu_compiler}')
+ GCC_HOST_COMPILER_PATH = ('%{gcc_host_compiler_path}')
++BINTOOLS_PATH = ('/appl/binutils/2.25.1/bin')
+
+ CURRENT_DIR = os.path.dirname(sys.argv[0])
+ NVCC_PATH = CURRENT_DIR + '/../../../cuda/bin/nvcc'
+ LLVM_HOST_COMPILER_PATH = ('/usr/bin/gcc')
+-PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH)
++PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH) + ':' + os.path.dirname(BINTOOLS_PATH)
++if 'PATH' in os.environ:
++  PREFIX_DIR = os.environ['PATH']
+
+ def Log(s):
+   print('gpus/crosstool: {0}'.format(s))
+@@ -244,7 +247,7 @@ def main():
+   cpu_compiler_flags = [flag for flag in sys.argv[1:]
+                              if not flag.startswith(('--cuda_log'))]
+
+-  return subprocess.call([CPU_COMPILER] + cpu_compiler_flags)
++  return subprocess.call([CPU_COMPILER] + cpu_compiler_flags, env=os.environ)
+
+ if __name__ == '__main__':
+   sys.exit(main())
+--
+2.8.1
