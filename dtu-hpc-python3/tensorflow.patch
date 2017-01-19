@@ -1,20 +1,20 @@
-From c5fad8aa8488eeacc49b42dc3527365f8d67882e Mon Sep 17 00:00:00 2001
-From: Lasse Regin Nielsen <lasseregin@gmail.com>
-Date: Tue, 17 Jan 2017 21:24:19 +0100
-Subject: [PATCH] [Fix] Patch for 0.12.1
+From b3c7588546d2175f089610460c3e34509f05c88d Mon Sep 17 00:00:00 2001
+From: Andreas Madsen <amwebdk@gmai.com>
+Date: Thu, 19 Jan 2017 14:31:03 +0100
+Subject: [PATCH] [PATCH] hpc hack
 
 ---
- tensorflow/core/platform/default/logging.cc                       | 2 ++
- .../crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl   | 8 ++++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ tensorflow/core/platform/default/logging.cc                            | 2 ++
+ .../gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl   | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/tensorflow/core/platform/default/logging.cc b/tensorflow/core/platform/default/logging.cc
-index 1d03725..79df349 100644
+index 1d03725..34af3d3 100644
 --- a/tensorflow/core/platform/default/logging.cc
 +++ b/tensorflow/core/platform/default/logging.cc
 @@ -74,6 +74,8 @@ void LogMessage::GenerateLogMessage() {
  #else
-
+ 
  void LogMessage::GenerateLogMessage() {
 +  if (severity_ <= INFO) return;
 +
@@ -22,34 +22,23 @@ index 1d03725..79df349 100644
    // that logs through the env or something and fill in appropriate time info.
    fprintf(stderr, "%c %s:%d] %s\n", "IWEF"[severity_], fname_, line_,
 diff --git a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
-index d3bb93c..7dca2fd 100755
+index d3bb93c..c384982 100755
 --- a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
 +++ b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
-@@ -48,11 +48,15 @@ import pipes
+@@ -48,11 +48,12 @@ import pipes
  # Template values set by cuda_autoconf.
  CPU_COMPILER = ('%{cpu_compiler}')
  GCC_HOST_COMPILER_PATH = ('%{gcc_host_compiler_path}')
 +BINTOOLS_PATH = ('/appl/binutils/2.25.1/bin')
-
+ 
  CURRENT_DIR = os.path.dirname(sys.argv[0])
  NVCC_PATH = CURRENT_DIR + '/../../../cuda/bin/nvcc'
  LLVM_HOST_COMPILER_PATH = ('/usr/bin/gcc')
 -PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH)
-+PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH) + ':' + os.path.dirname(BINTOOLS_PATH)
-+if 'PATH' in os.environ:
-+  PREFIX_DIR = os.environ['PATH']
-+
-
++PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH) + ':' + BINTOOLS_PATH
+ 
  def Log(s):
    print('gpus/crosstool: {0}'.format(s))
-@@ -244,7 +248,7 @@ def main():
-   cpu_compiler_flags = [flag for flag in sys.argv[1:]
-                              if not flag.startswith(('--cuda_log'))]
+-- 
+2.7.4
 
--  return subprocess.call([CPU_COMPILER] + cpu_compiler_flags)
-+  return subprocess.call([CPU_COMPILER] + cpu_compiler_flags, env=os.environ)
-
- if __name__ == '__main__':
-   sys.exit(main())
---
-2.8.1
