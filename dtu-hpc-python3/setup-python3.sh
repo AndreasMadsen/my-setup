@@ -61,7 +61,7 @@ start_time=`date +%s`
 # Setup virtual env
 #
 export PYTHONPATH=
-pyvenv ~/stdpy3 --copies
+python3 -m venv ~/stdpy3 --copies
 source ~/stdpy3/bin/activate
 
 #
