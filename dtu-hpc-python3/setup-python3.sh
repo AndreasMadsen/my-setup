@@ -140,10 +140,10 @@ rm -rf pyopencl-2016.2*
 pip3 install https://bitbucket.org/prologic/pydot/get/ac76697320d6.zip
 pip3 uninstall -y pyparsing
 pip3 install -U pyparsing==2.0.6
-patch -f stdpy3/lib/python3.5/site-packages/dot_parser.py \
+patch -f stdpy3/lib/python3.6/site-packages/dot_parser.py \
 <<EOF
---- a/stdpy3/lib/python3.5/site-packages/dot_parser.py
-+++ b/stdpy3/lib/python3.5/site-packages/dot_parser.py
+--- a/stdpy3/lib/python3.6/site-packages/dot_parser.py
++++ b/stdpy3/lib/python3.6/site-packages/dot_parser.py
 @@ -25,8 +25,9 @@
  from pyparsing import ( nestedExpr, Literal, CaselessLiteral, Word, Upcase, OneOrMore, ZeroOrMore,
      Forward, NotAny, delimitedList, oneOf, Group, Optional, Combine, alphas, nums,
