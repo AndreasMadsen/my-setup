@@ -1,4 +1,4 @@
-# DTU HPC – Python 3.5
+# DTU HPC – Python 3.6
 
 Install python and friends on DTUs shared user system. Included is:
 
