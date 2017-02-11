@@ -26,7 +26,7 @@ A template for LaTeX I have been continuously developing over a few years.
 THE DTU HPC system have quite a lot of legacy. This script updates and install
 the useful stuff.
 
-## [DTU HPC – Python 3.5](dtu-hpc-python3)
+## [DTU HPC – Python 3.6](dtu-hpc-python3)
 
 The Danish Technical University (DTU) have a supercomputer
 (see http://www.cc.dtu.dk/). I use this quite extensively for heavy computation
@@ -37,4 +37,4 @@ an automated setup script for python.
 ## [DTU HPC – Python 2.7](dtu-hpc-python2)
 
 Similar to [DTU HPC – Python 3.5](dtu-hpc-python3) but for python 2.7. I
-no longer maintain this and suggest you use python 3.4.
+no longer maintain this and suggest you use python 3.6.
