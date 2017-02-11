@@ -36,5 +36,5 @@ an automated setup script for python.
 
 ## [DTU HPC – Python 2.7](dtu-hpc-python2)
 
-Similar to [DTU HPC – Python 3.5](dtu-hpc-python3) but for python 2.7. I
+Similar to [DTU HPC – Python 3.6](dtu-hpc-python3) but for python 2.7. I
 no longer maintain this and suggest you use python 3.6.
