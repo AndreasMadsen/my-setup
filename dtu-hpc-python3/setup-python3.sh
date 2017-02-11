@@ -273,7 +273,7 @@ CC=gcc CXX=g++ bazel build --copt="-w" \
 
 # install tensorflow
 # note that the same will change depending on the version
-pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.12.1-cp35-cp35m-linux_x86_64.whl
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.12.1-cp36-cp36m-linux_x86_64.whl
 
 # cleanup bazel build files
 bazel clean --expunge
