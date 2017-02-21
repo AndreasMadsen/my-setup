@@ -61,7 +61,7 @@ start_time=`date +%s`
 # Setup virtual env
 #
 export PYTHONPATH=
-pyvenv ~/stdpy3 --copies
+python3 -m venv ~/stdpy3 --copies
 source ~/stdpy3/bin/activate
 
 #
@@ -140,10 +140,10 @@ rm -rf pyopencl-2016.2*
 pip3 install https://bitbucket.org/prologic/pydot/get/ac76697320d6.zip
 pip3 uninstall -y pyparsing
 pip3 install -U pyparsing==2.0.6
-patch -f stdpy3/lib/python3.5/site-packages/dot_parser.py \
+patch -f stdpy3/lib/python3.6/site-packages/dot_parser.py \
 <<EOF
---- a/stdpy3/lib/python3.5/site-packages/dot_parser.py
-+++ b/stdpy3/lib/python3.5/site-packages/dot_parser.py
+--- a/stdpy3/lib/python3.6/site-packages/dot_parser.py
++++ b/stdpy3/lib/python3.6/site-packages/dot_parser.py
 @@ -25,8 +25,9 @@
  from pyparsing import ( nestedExpr, Literal, CaselessLiteral, Word, Upcase, OneOrMore, ZeroOrMore,
      Forward, NotAny, delimitedList, oneOf, Group, Optional, Combine, alphas, nums,
@@ -273,7 +273,7 @@ CC=gcc CXX=g++ bazel build --copt="-w" \
 
 # install tensorflow
 # note that the same will change depending on the version
-pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.12.1-cp35-cp35m-linux_x86_64.whl
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.12.1-cp36-cp36m-linux_x86_64.whl
 
 # cleanup bazel build files
 bazel clean --expunge
