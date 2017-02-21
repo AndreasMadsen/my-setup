@@ -1,6 +1,6 @@
-From b3c7588546d2175f089610460c3e34509f05c88d Mon Sep 17 00:00:00 2001
+From 8fbf4fbbc89965b6809356144c9f7601dcdfe60c Mon Sep 17 00:00:00 2001
 From: Andreas Madsen <amwebdk@gmai.com>
-Date: Thu, 19 Jan 2017 14:31:03 +0100
+Date: Tue, 21 Feb 2017 12:13:08 +0100
 Subject: [PATCH] [PATCH] hpc hack
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH] [PATCH] hpc hack
  2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/tensorflow/core/platform/default/logging.cc b/tensorflow/core/platform/default/logging.cc
-index 1d03725..34af3d3 100644
+index 56985ee..46bdbf7 100644
 --- a/tensorflow/core/platform/default/logging.cc
 +++ b/tensorflow/core/platform/default/logging.cc
 @@ -74,6 +74,8 @@ void LogMessage::GenerateLogMessage() {
@@ -22,7 +22,7 @@ index 1d03725..34af3d3 100644
    // that logs through the env or something and fill in appropriate time info.
    fprintf(stderr, "%c %s:%d] %s\n", "IWEF"[severity_], fname_, line_,
 diff --git a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
-index d3bb93c..c384982 100755
+index b7d6cc6..a05b315 100755
 --- a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
 +++ b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
 @@ -48,11 +48,12 @@ import pipes
@@ -36,9 +36,9 @@ index d3bb93c..c384982 100755
  LLVM_HOST_COMPILER_PATH = ('/usr/bin/gcc')
 -PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH)
 +PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH) + ':' + BINTOOLS_PATH
+ NVCC_VERSION = '%{cuda_version}'
  
  def Log(s):
-   print('gpus/crosstool: {0}'.format(s))
 -- 
 2.7.4
 

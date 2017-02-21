@@ -233,10 +233,7 @@ pip3 install -U wheel
 # install tensorflow
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
-git checkout tags/0.12.1
-
-# Fix dead link in `workspace.bzl`
-git cherry-pick 1e317b1f7dc5ccf04fc51ac96d97f5bdaefa9af9
+git checkout tags/v1.0.0
 
 # apply patch for "could not find as" and "could not find swig"
 curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
@@ -245,7 +242,10 @@ curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-
 ln -fs /sbin/ldconfig $HOME/bin/ldconfig
 
 # set configuration parameters
+# GPUs appear to be on E5-26xx CPU machines, so optimize for sandybridge
+# http://stackoverflow.com/questions/943755/gcc-optimization-flags-for-xeon
 export PYTHON_BIN_PATH=`which python3`
+export CC_OPT_FLAGS='-march=sandybridge'
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
 export TF_NEED_CUDA=1
@@ -273,7 +273,7 @@ CC=gcc CXX=g++ bazel build --copt="-w" \
 
 # install tensorflow
 # note that the same will change depending on the version
-pip3 install -U $HOME/tensorflow_pkg/tensorflow-0.12.1-cp36-cp36m-linux_x86_64.whl
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-1.0.0-cp36-cp36m-linux_x86_64.whl
 
 # cleanup bazel build files
 bazel clean --expunge
