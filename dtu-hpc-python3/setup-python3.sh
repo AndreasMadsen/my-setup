@@ -235,7 +235,7 @@ git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
 git checkout tags/v1.0.0
 
-# apply patch for "could not find as" and "could not find swig"
+# apply patch for "could not find as"
 curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
 
 # fix an issue with ldconfig not being in the $PATH
@@ -245,14 +245,14 @@ ln -fs /sbin/ldconfig $HOME/bin/ldconfig
 # GPUs appear to be on E5-26xx CPU machines, so optimize for sandybridge
 # http://stackoverflow.com/questions/943755/gcc-optimization-flags-for-xeon
 export PYTHON_BIN_PATH=`which python3`
-export CC_OPT_FLAGS='-march=sandybridge'
+export CC_OPT_FLAGS='-march=sandybridge -w'
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
 export TF_NEED_CUDA=1
-export TF_NEED_JEMALLOC=0
+export TF_NEED_JEMALLOC=0 # MADV_NOHUGEPAGE feature is not avaliable
 export TF_ENABLE_XLA=0
 export TF_NEED_OPENCL=0
-export GCC_HOST_COMPILER_PATH=`which gcc` # $HOME/gcc
+export GCC_HOST_COMPILER_PATH=`which gcc`
 export TF_CUDA_VERSION=$CUDA_VERSION
 export CUDA_TOOLKIT_PATH=$CUDA_PATH
 export TF_CUDNN_VERSION=`echo $CUDNN_VERSION | head -c 1`
@@ -264,9 +264,10 @@ yes "" 2>/dev/null | CC=gcc CXX=g++ ./configure
 
 # build tensorflow
 # use --verbose_failures -s for more verboseness
-CC=gcc CXX=g++ bazel build --copt="-w" \
---ignore_unsupported_sandboxing --spawn_strategy=standalone \
--c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
+CC=gcc CXX=g++ bazel build \
+  --ignore_unsupported_sandboxing --spawn_strategy=standalone \
+  --config=opt --config=cuda \
+  //tensorflow/tools/pip_package:build_pip_package
 
 # build pip package
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package $HOME/tensorflow_pkg
