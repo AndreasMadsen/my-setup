@@ -242,14 +242,30 @@ curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-
 ln -fs /sbin/ldconfig $HOME/bin/ldconfig
 
 # set configuration parameters
+
 # GPUs appear to be on E5-26xx CPU machines, so optimize for sandybridge
 # http://stackoverflow.com/questions/943755/gcc-optimization-flags-for-xeon
+# Some nodes also has AVX2 and FMA support but these aren't avaliable on the
+# login node, which is useful for running `tensorboard`
+# https://en.wikipedia.org/wiki/List_of_Intel_Xeon_microprocessors#Xeon_E5-26xx_.28dual-processor.29
+
+# The GPUs and cuda capability are 4x Tesla K40c (3.5), 8x Tesla K80c (3.7)
+# and 8x TITAN X (6.1). Note that the k40sh also has a 1x Tesla K40c (3.5),
+# 2x Tesla K20c (3.5), 1x GTX TITAN X (5.2). But we choose to not compile with
+# cuda capability 5.2, since it takes longer to compile and it will still work.
+
+# JEMALLOC is a better malloc and is by default enabled, however it depends
+# on the MADV_NOHUGEPAGE linux feature, which is not avaliable here.
+
+# XLA is a linear algebra optimizer, in v1 it is experimental and by default
+# disabled. Confirm the default for now, but check back on it later, when it
+# becomes stable.
 export PYTHON_BIN_PATH=`which python3`
 export CC_OPT_FLAGS='-march=sandybridge -w'
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
 export TF_NEED_CUDA=1
-export TF_NEED_JEMALLOC=0 # MADV_NOHUGEPAGE feature is not avaliable
+export TF_NEED_JEMALLOC=0
 export TF_ENABLE_XLA=0
 export TF_NEED_OPENCL=0
 export GCC_HOST_COMPILER_PATH=`which gcc`
@@ -257,7 +273,7 @@ export TF_CUDA_VERSION=$CUDA_VERSION
 export CUDA_TOOLKIT_PATH=$CUDA_PATH
 export TF_CUDNN_VERSION=`echo $CUDNN_VERSION | head -c 1`
 export CUDNN_INSTALL_PATH=$CUDNN_PATH
-export TF_CUDA_COMPUTE_CAPABILITIES="3.5,5.2"
+export TF_CUDA_COMPUTE_CAPABILITIES="3.5,3.7,6.1"
 
 # configure tensorflow
 yes "" 2>/dev/null | CC=gcc CXX=g++ ./configure
@@ -273,7 +289,7 @@ CC=gcc CXX=g++ bazel build \
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package $HOME/tensorflow_pkg
 
 # install tensorflow
-# note that the same will change depending on the version
+# note that the path will change depending on the version
 pip3 install -U $HOME/tensorflow_pkg/tensorflow-1.0.0-cp36-cp36m-linux_x86_64.whl
 
 # cleanup bazel build files
