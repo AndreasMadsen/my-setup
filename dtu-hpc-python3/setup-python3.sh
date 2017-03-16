@@ -233,7 +233,7 @@ pip3 install -U wheel
 # install tensorflow
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
-git checkout tags/v1.0.0
+git checkout tags/v1.0.1
 
 # apply patch for "could not find as"
 curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
@@ -290,7 +290,7 @@ CC=gcc CXX=g++ bazel build \
 
 # install tensorflow
 # note that the path will change depending on the version
-pip3 install -U $HOME/tensorflow_pkg/tensorflow-1.0.0-cp36-cp36m-linux_x86_64.whl
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-1.0.1-cp36-cp36m-linux_x86_64.whl
 
 # cleanup bazel build files
 bazel clean --expunge
