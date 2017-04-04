@@ -208,14 +208,18 @@ pip3 install git+https://github.com/Lasagne/Lasagne.git
 #
 
 # install bazel (tensorflow dependency)
-wgetretry https://github.com/bazelbuild/bazel/releases/download/0.4.3/bazel-0.4.3-dist.zip
-unzip bazel-0.4.3-dist.zip -d bazel-0.4.3-dist
-cd bazel-0.4.3-dist
+module swap gcc/6.3.0
+
+wgetretry https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip
+unzip bazel-0.4.5-dist.zip -d bazel-0.4.5-dist
+cd bazel-0.4.5-dist
 CC=gcc CXX=g++ ./compile.sh
 mkdir -p $HOME/bin
 cp -f ./output/bazel $HOME/bin/bazel
 cd $HOME
-rm -rf bazel-0.4.3*
+rm -rf bazel-0.4.5*
+
+module swap gcc/4.9.2
 
 # configure bazel
 cat > $HOME/.bazelrc <<EOF
@@ -260,6 +264,9 @@ ln -fs /sbin/ldconfig $HOME/bin/ldconfig
 # XLA is a linear algebra optimizer, in v1 it is experimental and by default
 # disabled. Confirm the default for now, but check back on it later, when it
 # becomes stable.
+# While exploring XLA, I discovered that setting TF_ENABLE_XLA=1 adds a .bazelrc
+# file in the tensorflow directory. This takes president, thus
+# "import $HOME/.bazelrc" needs to be added to that file.
 export PYTHON_BIN_PATH=`which python3`
 export CC_OPT_FLAGS='-march=sandybridge -w'
 export TF_NEED_GCP=0
