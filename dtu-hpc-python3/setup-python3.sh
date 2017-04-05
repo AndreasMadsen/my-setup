@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #PBS -N setup-python3
-#PBS -l walltime=01:30:00
+#PBS -l walltime=02:00:00
 #PBS -l nodes=1:ppn=4:gpus=1
 #PBS -j oe
 #PBS -o setup-python3.log
@@ -33,8 +33,9 @@ export CXX='g++ -w'
 
 # Setup cuda path for theano
 export CUDA_VERSION='8.0'
+export CUDA_VERSION_PATCH='8.0.44'
 export CUDNN_VERSION='5.1'
-export CUDA_PATH="/appl/cuda/${CUDA_VERSION}"
+export CUDA_PATH="/appl/cuda/${CUDA_VERSION_PATCH}"
 export CUDNN_PATH="/appl/cudnn/v${CUDNN_VERSION}-prod"
 
 # load modules
@@ -234,12 +235,18 @@ mkdir -p /tmp/$USER
 # install wheel (used for building tensorflow pip package)
 pip3 install -U wheel
 
+# install protoc v3 (required for standalone tensorboard)
+wgetretry https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2.0-linux-x86_64.zip
+unzip protoc-3.2.0-linux-x86_64.zip
+rm -f protoc-3.2.0-linux-x86_64.zip readme.txt
+
 # install tensorflow
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
-git checkout tags/v1.0.1
+git checkout r1.1
 
 # apply patch for "could not find as"
+# cat $HOME/tensorflow.patch | git am -
 curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
 
 # fix an issue with ldconfig not being in the $PATH
@@ -262,18 +269,15 @@ ln -fs /sbin/ldconfig $HOME/bin/ldconfig
 # on the MADV_NOHUGEPAGE linux feature, which is not avaliable here.
 
 # XLA is a linear algebra optimizer, in v1 it is experimental and by default
-# disabled. Confirm the default for now, but check back on it later, when it
-# becomes stable.
-# While exploring XLA, I discovered that setting TF_ENABLE_XLA=1 adds a .bazelrc
-# file in the tensorflow directory. This takes president, thus
-# "import $HOME/.bazelrc" needs to be added to that file.
+# disabled. Extra code at runtime is required to enable it, even after setting
+# the compile flag: https://www.tensorflow.org/performance/xla/jit
 export PYTHON_BIN_PATH=`which python3`
 export CC_OPT_FLAGS='-march=sandybridge -w'
 export TF_NEED_GCP=0
 export TF_NEED_HDFS=0
 export TF_NEED_CUDA=1
 export TF_NEED_JEMALLOC=0
-export TF_ENABLE_XLA=0
+export TF_ENABLE_XLA=1
 export TF_NEED_OPENCL=0
 export GCC_HOST_COMPILER_PATH=`which gcc`
 export TF_CUDA_VERSION=$CUDA_VERSION
@@ -281,6 +285,10 @@ export CUDA_TOOLKIT_PATH=$CUDA_PATH
 export TF_CUDNN_VERSION=`echo $CUDNN_VERSION | head -c 1`
 export CUDNN_INSTALL_PATH=$CUDNN_PATH
 export TF_CUDA_COMPUTE_CAPABILITIES="3.5,3.7,6.1"
+
+# Setup ./configure to use the ~/.bazelrc file, ./configure
+# will append to this file, but not overwrite it.
+echo "import $HOME/.bazelrc" > .bazelrc
 
 # configure tensorflow
 yes "" 2>/dev/null | CC=gcc CXX=g++ ./configure
@@ -297,7 +305,7 @@ CC=gcc CXX=g++ bazel build \
 
 # install tensorflow
 # note that the path will change depending on the version
-pip3 install -U $HOME/tensorflow_pkg/tensorflow-1.0.1-cp36-cp36m-linux_x86_64.whl
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-1.1.0rc1-cp36-cp36m-linux_x86_64.whl
 
 # cleanup bazel build files
 bazel clean --expunge
@@ -305,6 +313,50 @@ bazel clean --expunge
 # cleanup tensorflow
 cd $HOME
 rm -rf tensorflow tensorflow_pkg tensorflow.patch
+
+# tensorboard can not be used on login nodes, so use a standalone version
+# to build this some temporary files from the tensorflow build are required.
+# below is a modified version if install.sh in https://github.com/dmlc/tensorboard
+git clone https://github.com/dmlc/tensorboard
+cd tensorboard
+make all
+
+# get tensorflow
+git clone https://github.com/tensorflow/tensorflow
+cd tensorflow
+git checkout r1.1
+curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
+
+# run configuration.
+module swap gcc/6.3.0
+export PYTHON_BIN_PATH=`which python3`
+export CC_OPT_FLAGS='-march=sandybridge -w'
+export TF_NEED_GCP=0
+export TF_NEED_HDFS=0
+export TF_NEED_CUDA=0
+export TF_NEED_JEMALLOC=0
+export TF_ENABLE_XLA=0
+export TF_NEED_OPENCL=0
+export GCC_HOST_COMPILER_PATH=`which gcc`
+echo "import $HOME/.bazelrc" > .bazelrc
+yes "" 2>/dev/null | CC=gcc CXX=g++ ./configure
+
+# build tensorboard
+bazel build tensorflow/tensorboard:tensorboard
+module swap gcc/4.9.2
+
+# prepare pip installation package
+cp -r ../tools/* bazel-bin/tensorflow/tools/
+# get .whl file in python/dist/
+bash bazel-bin/tensorflow/tools/pip_package/build_pip_package.sh ../python/dist/
+
+# install tensorboard package from .whl file
+cd ..
+pip3 install -U python/dist/*.whl
+
+# cleanup
+cd $HOME
+rm -rf tensorboard
 
 # DONE
 end_time=`date +%s`
