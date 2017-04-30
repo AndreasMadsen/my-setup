@@ -220,8 +220,6 @@ cp -f ./output/bazel $HOME/bin/bazel
 cd $HOME
 rm -rf bazel-0.4.5*
 
-module swap gcc/4.9.2
-
 # configure bazel
 cat > $HOME/.bazelrc <<EOF
 # --batch: always run in batch mode, since there are some firewall issues.
@@ -240,17 +238,17 @@ wgetretry https://github.com/google/protobuf/releases/download/v3.2.0/protoc-3.2
 unzip protoc-3.2.0-linux-x86_64.zip
 rm -f protoc-3.2.0-linux-x86_64.zip readme.txt
 
+# fix an issue with ldconfig not being in the $PATH
+ln -fs /sbin/ldconfig $HOME/bin/ldconfig
+
 # install tensorflow
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
-git checkout r1.1
+git checkout v1.1.0
 
 # apply patch for "could not find as"
 # cat $HOME/tensorflow.patch | git am -
 curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
-
-# fix an issue with ldconfig not being in the $PATH
-ln -fs /sbin/ldconfig $HOME/bin/ldconfig
 
 # set configuration parameters
 
@@ -271,6 +269,7 @@ ln -fs /sbin/ldconfig $HOME/bin/ldconfig
 # XLA is a linear algebra optimizer, in v1 it is experimental and by default
 # disabled. Extra code at runtime is required to enable it, even after setting
 # the compile flag: https://www.tensorflow.org/performance/xla/jit
+module swap gcc/4.9.2
 export PYTHON_BIN_PATH=`which python3`
 export CC_OPT_FLAGS='-march=sandybridge -w'
 export TF_NEED_GCP=0
@@ -299,20 +298,21 @@ CC=gcc CXX=g++ bazel build \
   --ignore_unsupported_sandboxing --spawn_strategy=standalone \
   --config=opt --config=cuda \
   //tensorflow/tools/pip_package:build_pip_package
+module swap gcc/6.3.0
 
 # build pip package
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package $HOME/tensorflow_pkg
 
 # install tensorflow
 # note that the path will change depending on the version
-pip3 install -U $HOME/tensorflow_pkg/tensorflow-1.1.0rc1-cp36-cp36m-linux_x86_64.whl
+pip3 install -U $HOME/tensorflow_pkg/tensorflow-1.1.0-cp36-cp36m-linux_x86_64.whl
 
 # cleanup bazel build files
 bazel clean --expunge
 
 # cleanup tensorflow
 cd $HOME
-rm -rf tensorflow tensorflow_pkg tensorflow.patch
+rm -rf tensorflow tensorflow_pkg
 
 # tensorboard can not be used on login nodes, so use a standalone version
 # to build this some temporary files from the tensorflow build are required.
@@ -320,15 +320,15 @@ rm -rf tensorflow tensorflow_pkg tensorflow.patch
 git clone https://github.com/dmlc/tensorboard
 cd tensorboard
 make all
+curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorboard.patch | git am -
 
 # get tensorflow
 git clone https://github.com/tensorflow/tensorflow
 cd tensorflow
-git checkout r1.1
+git checkout v1.1.0
 curl -L https://raw.githubusercontent.com/AndreasMadsen/my-setup/master/dtu-hpc-python3/tensorflow.patch | git am -
 
 # run configuration.
-module swap gcc/6.3.0
 export PYTHON_BIN_PATH=`which python3`
 export CC_OPT_FLAGS='-march=sandybridge -w'
 export TF_NEED_GCP=0
@@ -342,8 +342,7 @@ echo "import $HOME/.bazelrc" > .bazelrc
 yes "" 2>/dev/null | CC=gcc CXX=g++ ./configure
 
 # build tensorboard
-bazel build tensorflow/tensorboard:tensorboard
-module swap gcc/4.9.2
+CC=gcc CXX=g++ bazel build tensorflow/tensorboard:tensorboard
 
 # prepare pip installation package
 cp -r ../tools/* bazel-bin/tensorflow/tools/
@@ -357,6 +356,9 @@ pip3 install -U python/dist/*.whl
 # cleanup
 cd $HOME
 rm -rf tensorboard
+
+# restore gcc version
+module swap gcc/4.9.2
 
 # DONE
 end_time=`date +%s`
