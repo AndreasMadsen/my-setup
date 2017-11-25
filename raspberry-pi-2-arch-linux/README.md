@@ -299,6 +299,7 @@ https://wiki.archlinux.org/index.php/Sudo
 useradd -m -g wheel pi
 chfn pi  # Enter Andreas Madsen, Home
 passwd pi
+mkhomedir_helper pi
 ```
 
 To allow sudo install it:
