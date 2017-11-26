@@ -289,6 +289,7 @@ Append the rules with:
 
 ```bash
 iptables-restore < /etc/iptables/iptables.rules
+systemctl enable iptables
 ```
 
 ## Create user
