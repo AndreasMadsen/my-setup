@@ -8,7 +8,7 @@ Install python and friends on DTUs shared user system. Included is:
 * scikit-learn
 * pandas
 * PyOpenCL (with mako)
-* Theano (with pydot, libgpuarray, cuda 8.0 and cuDNN 5)
+* Tensorflow (cuda 8.0 and cuDNN 5)
 
 ### Run setup script
 
