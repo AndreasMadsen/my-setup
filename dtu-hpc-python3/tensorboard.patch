@@ -1,0 +1,45 @@
+From 2b59a6c381a087ba6bcf52f1de62d278922a2742 Mon Sep 17 00:00:00 2001
+From: Andreas Madsen <amwebdk@gmai.com>
+Date: Sun, 30 Apr 2017 15:18:26 +0200
+Subject: [PATCH] [hack] fix tensorboard-binary patch to tensorflow v1.1.0
+
+---
+ tensorboard-binary.patch | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/tensorboard-binary.patch b/tensorboard-binary.patch
+index e3c7d0c..d68c907 100644
+--- a/tensorboard-binary.patch
++++ b/tensorboard-binary.patch
+@@ -1,5 +1,5 @@
+ diff --git a/python/tensorboard/tensorboard b/python/tensorboard/tensorboard
+-index cde1e9e..e205d52 100755
++index 0953c58..718723c 100755
+ --- a/python/tensorboard/tensorboard
+ +++ b/python/tensorboard/tensorboard
+ @@ -7,6 +7,7 @@ import shutil
+@@ -10,10 +10,10 @@ index cde1e9e..e205d52 100755
+  
+  # Return True if running on Windows
+  def IsWindows():
+-@@ -58,6 +59,10 @@ def FindModuleSpace():
+-     module_space = stub_filename + '.runfiles'
++@@ -75,6 +76,19 @@ def FindModuleSpace():
+      if os.path.isdir(module_space):
+        break
++ 
+ +    package_path = site.getsitepackages()
+ +    # In case this instance is a string
+ +    if not isinstance(package_path, list):
+@@ -26,6 +26,7 @@ index cde1e9e..e205d52 100755
+ +      module_space = mod + '/tensorboard/tensorboard' + '.runfiles'
+ +      if os.path.isdir(module_space):
+ +        return module_space
+- 
+++
+      runfiles_pattern = "(.*\.runfiles)/.*"
+      if IsWindows():
++       runfiles_pattern = "(.*\.runfiles)\\.*"
+-- 
+2.7.4
+

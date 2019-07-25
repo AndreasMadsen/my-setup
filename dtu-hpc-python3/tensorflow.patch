@@ -1,6 +1,6 @@
-From 8fbf4fbbc89965b6809356144c9f7601dcdfe60c Mon Sep 17 00:00:00 2001
+From 049aed0e637004d275232651c67b6693bf0ce828 Mon Sep 17 00:00:00 2001
 From: Andreas Madsen <amwebdk@gmai.com>
-Date: Tue, 21 Feb 2017 12:13:08 +0100
+Date: Wed, 5 Apr 2017 19:19:35 +0200
 Subject: [PATCH] [PATCH] hpc hack
 
 ---
@@ -9,18 +9,18 @@ Subject: [PATCH] [PATCH] hpc hack
  2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/tensorflow/core/platform/default/logging.cc b/tensorflow/core/platform/default/logging.cc
-index 56985ee..46bdbf7 100644
+index 73dac96..a6a87df 100644
 --- a/tensorflow/core/platform/default/logging.cc
 +++ b/tensorflow/core/platform/default/logging.cc
-@@ -74,6 +74,8 @@ void LogMessage::GenerateLogMessage() {
+@@ -76,6 +76,8 @@ void LogMessage::GenerateLogMessage() {
  #else
  
  void LogMessage::GenerateLogMessage() {
 +  if (severity_ <= INFO) return;
 +
-   // TODO(jeff,sanjay): For open source version, replace this with something
-   // that logs through the env or something and fill in appropriate time info.
-   fprintf(stderr, "%c %s:%d] %s\n", "IWEF"[severity_], fname_, line_,
+   static EnvTime* env_time = tensorflow::EnvTime::Default();
+   uint64 now_micros = env_time->NowMicros();
+   time_t now_seconds = static_cast<time_t>(now_micros / 1000000);
 diff --git a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl b/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
 index b7d6cc6..a05b315 100755
 --- a/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
